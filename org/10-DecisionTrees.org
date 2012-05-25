@@ -1,0 +1,211 @@
+#+TITLE:   Decision Trees and Ensemble Learning
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+* Review
+** Decision Trees Review
+*** <1-> What is a decision tree?
+**** <2-> a function that takes as input a vector of attribute values and returns a output value
+**** <2-> assumption: inputs are discrete and output is boolean
+**** <2-> given a set of examples: value assignment to attributes in input and corresponding output value
+*** <3-> Entropy of a random variable?
+**** <4-> measurement of uncertainity of a random variable
+**** <4-> acquisition of information corresponds to reduction in entropy
+**** <4-> \[H(V) = -\sum_k P(v_k)\log_2P(v_k)\]
+**** <5-> $H(fair-coin)$?
+**** <6-> $H(tail-only)$?
+*** <7-> $B(q)$
+**** <8-> entropy of a Boolean random variable that is true with a probability $q$
+**** <8-> $B(q) = -(q \log_2 q + (1-q) \log_2 (1-q))$
+* Decision Tree
+** Learning to Lunch
+|--------+-----------+-------+---------+-------|
+| Price  | Food Type | Rush? | Results | Index |
+|--------+-----------+-------+---------+-------|
+| High   | Sushi     | Hurry | Good    | x1    |
+| Low    | Pizza     | Hurry | Good    | x2    |
+| Medium | Hamburger | Hurry | Good    | x3    |
+| Medium | Pizza     | Relax | Good    | x4    |
+| High   | Gruel     | Relax | Bad     | x5    |
+| High   | Hamburger | Relax | Good    | x6    |
+| Low    | Gruel     | Hurry | Bad     | x7    |
+| Low    | Sushi     | Relax | Bad     | x8    |
+| High   | Pizza     | Hurry | Bad     | x9    |
+| High   | Hamburger | Hurry | Bad     | x10   |
+| Medium | Hamburger | Hurry | Bad     | x11   |
+| Low    | Gruel     | Relax | Bad     | x12   |
+|--------+-----------+-------+---------+-------|
+*** <2-> What is the entropy of the result attribute of the whole example set?
+**** <3-> $B(\frac{5}{12})$
+**** <4-> $-\frac{5}{12}\log_2\frac{5}{12} - \frac{7}{12}\log_2\frac{27}{12} = 0.9803$
+** Learning to Lunch
+\small
+|--------+-----------+-------+---------+-------|
+| Price  | Food Type | Rush? | Results | Index |
+|--------+-----------+-------+---------+-------|
+| High   | Sushi     | Hurry | Good    | x1    |
+| Low    | Pizza     | Hurry | Good    | x2    |
+| Medium | Hamburger | Hurry | Good    | x3    |
+| Medium | Pizza     | Relax | Good    | x4    |
+| High   | Gruel     | Relax | Bad     | x5    |
+| High   | Hamburger | Relax | Good    | x6    |
+| Low    | Gruel     | Hurry | Bad     | x7    |
+| Low    | Sushi     | Relax | Bad     | x8    |
+| High   | Pizza     | Hurry | Bad     | x9    |
+| High   | Hamburger | Hurry | Bad     | x10   |
+| Medium | Hamburger | Hurry | Bad     | x11   |
+| Low    | Gruel     | Relax | Bad     | x12   |
+|--------+-----------+-------+---------+-------|
+*** What is first attribute to split on?
+**** <2-> That attribute that gives us the most information gain, reduces the entropy by the largest amount.
+**** <3-> \[Remainder(A)= \sum_{k=1}^{d}\frac{p_k+n_k}{p+n}B(\frac{p_k}{p_k+n_k})\]
+**** <4-> \[Gain(A) = B(\frac{p_k}{p_k+n_k}) - Remainder(A)\]
+** Learning to Lunch
+\small
+|--------+-----------+-------+---------+-------|
+| Price  | Food Type | Rush? | Results | Index |
+|--------+-----------+-------+---------+-------|
+| High   | Sushi     | Hurry | Good    | x1    |
+| Low    | Pizza     | Hurry | Good    | x2    |
+| Medium | Hamburger | Hurry | Good    | x3    |
+| Medium | Pizza     | Relax | Good    | x4    |
+| High   | Gruel     | Relax | Bad     | x5    |
+| High   | Hamburger | Relax | Good    | x6    |
+| Low    | Gruel     | Hurry | Bad     | x7    |
+| Low    | Sushi     | Relax | Bad     | x8    |
+| High   | Pizza     | Hurry | Bad     | x9    |
+| High   | Hamburger | Hurry | Bad     | x10   |
+| Medium | Hamburger | Hurry | Bad     | x11   |
+| Low    | Gruel     | Relax | Bad     | x12   |
+|--------+-----------+-------+---------+-------|
+*** What is first attribute to split on?
+**** <2-> Remainder(Type)?
+***** <3-> $\frac{2}{12}B(\frac{1}{2}) + \frac{3}{12}B(\frac{2}{3})+\frac{4}{12}B(\frac{1}{2})+\frac{3}{12}B(0) = 0.6371$
+**** <4-> Remainder(Price)?
+***** <5->  $\frac{5}{12}B(\frac{2}{5}) + \frac{3}{12}B(\frac{2}{3})+\frac{4}{12}B(\frac{1}{4}) = 0.90448$
+**** <5-> Remainder(Rush)?
+***** <6-> $\frac{6}{12}B(\frac{1}{2}) + \frac{6}{12}B(\frac{2}{3}) = 0.9591$
+**** <7-> Gain(Type)? Gain(Price)? Gain(Rush)?
+***** <8-> 0.3432, 0.07585, 0.0212
+* Ensemble Learning
+** Ensemble of Stumps
+\small
+|--------+-----------+-------+---------+-------|
+| Price  | Food Type | Rush? | Results | Index |
+|--------+-----------+-------+---------+-------|
+| High   | Sushi     | Hurry | Good    | x1    |
+| Low    | Pizza     | Hurry | Good    | x2    |
+| Medium | Hamburger | Hurry | Good    | x3    |
+| Medium | Pizza     | Relax | Good    | x4    |
+| High   | Gruel     | Relax | Bad     | x5    |
+| High   | Hamburger | Relax | Good    | x6    |
+| Low    | Gruel     | Hurry | Bad     | x7    |
+| Low    | Sushi     | Relax | Bad     | x8    |
+| High   | Pizza     | Hurry | Bad     | x9    |
+| High   | Hamburger | Hurry | Bad     | x10   |
+| Medium | Hamburger | Hurry | Bad     | x11   |
+| Low    | Gruel     | Relax | Bad     | x12   |
+|--------+-----------+-------+---------+-------|
+*** <2-> What is the weight of examples?
+**** <3-> $\frac{1}{12}$
+*** <4-> What is the initial decision stump (use information gain)?
+**** <5-> Food type
+*** <6-> What is the classification error?
+**** <7-> Sushi (good), Hamburger (good), Pizza (good), Gruel (bad)
+**** <7-> $\frac{4}{12}=0.333$
+*** <8-> What is the weight of the hypothesis?
+**** <9-> $z[1 ]= \log(\frac{1-0.333}{0.333}) = 0.695$
+** Ensemble of Stumps
+\small
+|--------+-----------+-------+---------+-------|
+| Price  | Food Type | Rush? | Results | Index |
+|--------+-----------+-------+---------+-------|
+| High   | Sushi     | Hurry | Good    | x1    |
+| Low    | Pizza     | Hurry | Good    | x2    |
+| Medium | Hamburger | Hurry | Good    | x3    |
+| Medium | Pizza     | Relax | Good    | x4    |
+| High   | Gruel     | Relax | Bad     | x5    |
+| High   | Hamburger | Relax | Good    | x6    |
+| Low    | Gruel     | Hurry | Bad     | x7    |
+| Low    | Sushi     | Relax | Bad     | x8    |
+| High   | Pizza     | Hurry | Bad     | x9    |
+| High   | Hamburger | Hurry | Bad     | x10   |
+| Medium | Hamburger | Hurry | Bad     | x11   |
+| Low    | Gruel     | Relax | Bad     | x12   |
+|--------+-----------+-------+---------+-------|
+*** How will the weight change?
+** Ensemble of Stumps
+\small
+|--------+-----------+-------+---------+-------+--------|
+| Price  | Food Type | Rush? | Results | Index | Weight |
+|--------+-----------+-------+---------+-------+--------|
+| High   | Sushi     | Hurry | Good    | x1    | 0.0625 |
+| Low    | Pizza     | Hurry | Good    | x2    | 0.0625 |
+| Medium | Hamburger | Hurry | Good    | x3    | 0.0625 |
+| Medium | Pizza     | Relax | Good    | x4    | 0.0625 |
+| High   | Gruel     | Relax | Bad     | x5    | 0.0625 |
+| High   | Hamburger | Relax | Good    | x6    | 0.0625 |
+| Low    | Gruel     | Hurry | Bad     | x7    | 0.0625 |
+| Low    | Sushi     | Relax | Bad     | x8    |  0.125 |
+| High   | Pizza     | Hurry | Bad     | x9    |  0.125 |
+| High   | Hamburger | Hurry | Bad     | x10   |  0.125 |
+| Medium | Hamburger | Hurry | Bad     | x11   |  0.125 |
+| Low    | Gruel     | Relax | Bad     | x12   | 0.0625 |
+|--------+-----------+-------+---------+-------+--------|
+*** <1-> How will the weight change?
+**** <2-> $w[j] \leftarrow w[j]. \frac{error}{(1-error)}$
+**** <2-> NORMALIZE(w)
+*** <3-> New entropy of the sample
+**** <4-> $-0.3125\log_2(0.3125) - 0.6875\log_2(0.6875)$
+*** <5-> Genrate the next stump.
+**** <6-> \[Remainder(A)= \sum_{k=1}^{d}\frac{p_k+n_k}{p+n}B(\frac{p_k}{p_k+n_k})\]
+* PAC
+** PAC Hypothesis
+*** <2-> Size of the hypothesis space of this problem.
+**** <3-> $2^{3*4*2}$
+*** <4-> If a hypothesis classifies more than 3 samples wrong, it is a bad hypothesis. What is the epsilon?
+**** <5-> $\frac{3}{24}$
+*** <6-> After 12 examples are observed, what is the hypothesis space?
+**** <7-> $2^{12}$
+*** <8-> How many of these are approximately correct?
+**** <9-> $1 + 12 + {12\choose2}$
+*** <10-> What is the probability that a randomly-chosen hypothesis that is consistent with the 8 examples seen so far will be approximately correct?
+****  <11-> $\frac{1 + 12 + {12\choose2}} {2^{12}}$
+
+  

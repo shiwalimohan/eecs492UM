@@ -1,0 +1,61 @@
+#+TITLE:   Search
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DATE:      January 27, 2012
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 1
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+
+* A Water Jug Problem
+The agent is given two jugs, a 4-gallon one and a 3-gallon
+one. Neither has any measuring markers on it. The is an infinite
+source/sink of water. How can the agent get exactly 1 gallons of water
+into the 3-gallon jug?
+
+* Problem Formulation
+- How would you represent state? How many states can be represented?
+- What is the initial state? 
+- What is the goal state? How many states satisfy the goal test?
+- What are the actions?
+- What is the path cost?
+
+* Search Space for Water Jug
+\centering
+#+ATTR_LATEX: width=1.0\textwidth
+[[file:../images/water-jug.eps]]
+

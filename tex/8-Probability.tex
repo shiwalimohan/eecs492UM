@@ -1,0 +1,360 @@
+% Created 2012-05-25 Fri 12:20
+\documentclass[compress, 9pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\usetheme{default}
+\usecolortheme[RGB={0,38,93}]{structure}
+\usefonttheme{serif}
+\useinnertheme{circles}
+\useoutertheme[]{shadow}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{natbib}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{bibentry}
+\institute{Computer Science and Engineering \\ University of Michigan}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{Probability and Inference}
+\author{Shiwali Mohan}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Outline}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+
+
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+
+
+\section{Probability review}
+\label{sec-1}
+\begin{frame}
+\frametitle{Terminology}
+\label{sec-1-1}
+\begin{itemize}
+
+\item <1-> Prior probability
+\label{sec-1-1-1}%
+\begin{itemize}
+
+\item <2-> belief in propositions in the absence of any other information
+\label{sec-1-1-1-1}%
+
+\item <2-> marginal, unconditional
+\label{sec-1-1-1-2}%
+\begin{itemize}
+
+\item <3->  P(double): ?
+\label{sec-1-1-1-2-1}%
+
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+
+\item <4-> Posterior Probability
+\label{sec-1-1-2}%
+\begin{itemize}
+
+\item <5-> belief in propositions after evidence
+\label{sec-1-1-2-1}%
+
+\item <5-> conditional
+\label{sec-1-1-2-2}%
+\begin{itemize}
+
+\item <6-> P(double/5):?
+\label{sec-1-1-2-2-1}%
+\begin{itemize}
+\item Posterior probability
+  belief in propositions after evidence
+  P(double/5):?
+  P(11/6):?
+\end{itemize}
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\section{Probability and Inference from Full Joint Distribution}
+\label{sec-2}
+\begin{frame}
+\frametitle{Calculating Probabilities}
+\label{sec-2-1}
+
+Dr. Lycan Thropes, an expert in werewolves, asserts that a person is a werewolf 
+iff they have hairy palms and howl at the moon. Further, he states that 25\% of the 
+population either has hairy palms or howls or both, and that 20\% of the
+population has hairy palms.
+\begin{itemize}
+
+\item <1-> Random variables?
+\label{sec-2-1-1}%
+\begin{itemize}
+
+\item <2-> hairy palms (palms), howl (howls), werewolf (werewolf)
+\label{sec-2-1-1-1}%
+\end{itemize} % ends low level
+
+\item <3-> What is the bound on probability that a randomly selected person from the population howls at the moon?
+\label{sec-2-1-2}%
+\begin{itemize}
+
+\item <4-> 0.05 <= P(howls) <= 0.25
+\label{sec-2-1-2-1}%
+\end{itemize} % ends low level
+
+\item <5-> If one in hundred people is a werewolf, what is the P(howls)?
+\label{sec-2-1-3}%
+\begin{itemize}
+
+\item <6-> 0.06
+\label{sec-2-1-3-1}%
+
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Inference on Full Joint}
+\label{sec-2-2}
+
+Noted werewolf specialist Prof. Loupgarou disagrees with Thropes, and 
+provides a joint probability table for combinations of werewolves, 
+hairy palms, and howling. 
+\begin{itemize}
+
+\item <2-> What is a full joint distribution?
+\label{sec-2-2-1}%
+
+\item <3-> How many entries exist in the full joint distribution?
+\label{sec-2-2-2}%
+
+\item <4-> Given the following full joint distribution. Sum to 1?\\
+\label{sec-2-2-3}%
+\begin{center}
+\begin{tabular}{lllr}
+ hairy palms  &  howls  &  werewolf  &  Probability  \\
+\hline
+ false        &  false  &  false     &          0.7  \\
+ false        &  false  &  true      &        0.005  \\
+ false        &  true   &  false     &         0.05  \\
+ false        &  true   &  true      &         0.01  \\
+ True         &  false  &  false     &          0.2  \\
+ True         &  false  &  true      &         0.01  \\
+ True         &  true   &  false     &        0.005  \\
+ True         &  true   &  true      &         0.02  \\
+\end{tabular}
+\end{center}
+
+
+
+\item <5-> What is the marginal probability of werewolf?
+\label{sec-2-2-4}%
+\begin{itemize}
+
+\item <6-> 0.045
+\label{sec-2-2-4-1}%
+\end{itemize} % ends low level
+
+\item <7-> If an individual has hairy palms and howls, what is the probability that the individual is a werewolf?
+\label{sec-2-2-5}%
+\begin{itemize}
+
+\item <8-> 0.8
+\label{sec-2-2-5-1}%
+\end{itemize} % ends low level
+
+\item <8-> What is the probability that a werewolf has both hairy palms and howls?
+\label{sec-2-2-6}%
+\begin{itemize}
+
+\item <9-> 0.44
+\label{sec-2-2-6-1}%
+
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\section{Bayes Net}
+\label{sec-3}
+\begin{frame}[fragile]
+\frametitle{Inference}
+\label{sec-3-1}
+
+Events A, B, C, D, E occur with the following probabilities. Assume
+conditional independence amongst variables.
+
+\begin{verbatim}
+ P(A) = 0.3
+ P(B) = 0.6
+ P(C|A) = 0.8
+ P(C|-A) = 0.4
+ P(D|A,B) = 0.7
+ P(D|A,-B) = 0.8
+ P(D|-A,B) = 0.1
+ P(D|-A,-B) = 0.2
+ P(E|C) = 0.7
+ P(E|C) = 0.2
+\end{verbatim}
+\end{frame}
+\section{Bayes Net}
+\label{sec-4}
+
+For given probabilities
+
+P(A) = 0.3
+P(B) = 0.6
+P(C|A) = 0.8
+P(C|-A) = 0.4
+P(D|A,B) = 0.7 
+P(D|A,-B) = 0.8 
+P(D|-A,B) = 0.1 
+P(D|-A,B) = 0.2 
+P(E|C) = 0.7 
+P(E|C) = 0.2
+
+\begin{itemize}
+\item Construct a Bayes Net
+\end{itemize}
+
+
+\begin{itemize}
+\item P(D)?
+\end{itemize}
+
+P(D,A,B) + P(D,A,-B) + P(D,-A,B) + P(D,-A,-B) =
+P(D|A,B) P(A,B) + P(D|A,-B) P(A,-B) + 
+P(D|-A,B) P(-A,B) + P(D|-A,-B) P(-A,-B) = 
+(since A and B are independent absolutely)
+P(D|A,B) P(A) P(B) + P(D|A,-B) P(A) P(-B) + 
+P(D|-A,B) P(-A) P(B) + P(D|-A,B) P(-A) P(-B) =
+0.7*0.3*0.6 + 0.8*0.3*0.4 + 0.1*0.7*0.6 + 0.2*0.7*0.4 = 0.32
+
+
+\begin{itemize}
+\item P(A|C)?
+\end{itemize}
+
+
+P(A|C) = P(C|A)P(A) / P(C). 
+Now P(C) = P(C,A) + P(C,-A) = 
+P(C|A)P(A) + P(C|-A)P(-A) = 
+0.8*0.3+ 0.4*0.7 = 0.52
+So P(C|A)P(A) / P(C) = 0.8*0.3/0.52= 0.46.
+
+
+
+\begin{itemize}
+\item P(C|-A,E)?
+\end{itemize}
+
+P(C|-A,E) = 
+P(E|C,-A) * P(C|-A) / P(E|-A) = 
+P(E|C) * P(C|-A) / P(E|-A). 
+Now P(E|-A) = P(E,C|-A) + P(E,-C|-A) =
+P(E|C,-A) P(C|-A) + P(E|-C,-A) P(-C|-A) = (since E is independent of A given C)
+P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A).
+So we have 
+P(C|-A, E) = 
+P(E|C) * P(C|-A) / (P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A)) =
+0.7*0.4 / (0.7 * 0.4 + 0.2 * 0.6) = 0.7
+\begin{verbatim}
+ P(D|-A,-B) = 0.2
+ P(E|C) = 0.7
+ P(E|-C) = 0.2
+\end{verbatim}
+\begin{frame}[fragile]
+\frametitle{Inference}
+\label{sec-4-1}
+
+For given probabilities
+\begin{verbatim}
+ P(A) = 0.3
+ P(B) = 0.6
+ P(C|A) = 0.8
+ P(C|-A) = 0.4
+ P(D|A,B) = 0.7
+ P(D|A,-B) = 0.8
+ P(D|-A,B) = 0.1
+ P(D|-A,-B) = 0.2
+ P(E|C) = 0.7
+ P(E|-C) = 0.2
+\end{verbatim}
+\begin{itemize}
+
+\item P(A|C)?
+\label{sec-4-1-1}%
+
+\item <2->
+\label{sec-4-1-2}%
+\begin{verbatim}
+ P(A|C) = P(C|A)P(A) / P(C)
+ P(C) = P(C,A) + P(C,-A) 
+      = P(C|A)P(A) + P(C|-A)P(-A) 
+      = 0.8*0.3+ 0.4*0.7 = 0.52
+ P(C|A)P(A) / P(C) = 0.8*0.3/0.52= 0.46.
+\end{verbatim}
+
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}[fragile]
+\frametitle{Inference}
+\label{sec-4-2}
+
+For given probabilities
+\begin{verbatim}
+ P(A) = 0.3
+ P(B) = 0.6
+ P(C|A) = 0.8
+ P(C|-A) = 0.4
+ P(D|A,B) = 0.7
+ P(D|A,-B) = 0.8
+ P(D|-A,B) = 0.1
+ P(D|-A,-B) = 0.2
+ P(E|C) = 0.7
+ P(E|-C) = 0.2
+\end{verbatim}
+\begin{itemize}
+
+\item P(C|-A,E)?
+\label{sec-4-2-1}%
+
+\item <2->
+\label{sec-4-2-2}%
+\begin{verbatim}
+ P(C|-A,E) 
+ = P(E|C,-A) * P(C|-A) / P(E|-A) 
+ = P(E|C) * P(C|-A) / P(E|-A).
+ P(E|-A) = P(E,C|-A) + P(E,-C|-A) 
+         = P(E|C,-A) P(C|-A) + P(E|-C,-A) P(-C|-A) 
+           (since E is independent of A given C)
+          = P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A)
+ P(C|-A, E) 
+ = P(E|C) * P(C|-A) / (P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A)) 
+ 0.7*0.4 / (0.7 * 0.4 + 0.2 * 0.6) = 0.7
+\end{verbatim}
+\end{itemize} % ends low level
+\end{frame}
+
+\end{document}

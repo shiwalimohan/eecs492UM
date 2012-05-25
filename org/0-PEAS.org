@@ -1,0 +1,62 @@
+#+TITLE:     Dicussion Outline (January 13)
+#+AUTHOR:    Shiwali Mohan
+#+EMAIL:     shiwali@predator
+#+DATE:      2012-01-10 Tue
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+
+* Revision of PEAS terminology
+performance, environment, actuators, sensors
+stress on why it is important to characterize a task.
+* Properties of task environment
+** Observability
+- partially observable only if the unperceived information is
+  /relevant/ to the action choice. eg: a cleaning agent vacuuming a
+  room does not need to know about the weather to plan, make a decision.
+- arises because of noisy sensors, lack of sensory data
+** Single agent v/s multi agent
+- difference between an /agent/ and an /object/.
+- competitive, cooperative
+** Determinism
+- stochastic process generates next state
+- also related to observability of the environment
+** Episodic v/s sequential
+different for different formulations
+  - A single firefighting task is sequential, however one expedition
+    does not affect others.
+** Static v/s dynamic
+environment changes during deliberation. strategy games v/s action games
+** Discrete v/s continuous
+continuous state, time, percepts, actions 
+** Known v/s unknown
+model of the environment v/s learning
+
+* Examples 
+| Domain                          |
+|---------------------------------|
+| Missionaries and Cannibals      |
+| Super Mario                     |
+| Robo-soccer                     |
+| Driving domain                  |
+| Fire-fighting domain            |
+| Hand-written Number Recognition |
+| Siri                            |
+
+* Evaluation
+- How to evaluate an agent's performance? Discuss wrt examples in the
+  previous section. Evaluation should be done in multiple scenarios. 
+  Introduce the concept of false positives/negatives; eg: hand-written
+  number recognition.
+
+
+

@@ -1,0 +1,180 @@
+#+TITLE:   Classical Planning
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+* Classical Planning
+** Review
+*** <1-> What is a plannning problem?
+- <2-> asks if we can reach a goal state from the initial state
+- <2-> how?
+*** <3-> Environment is 
+- <3-> fully observable
+- <3-> deterministic
+- <3-> finite
+- <3-> static
+- <3-> discrete
+*** <4-> Combination of
+- <4-> Logic (state and action representation)
+- <4-> Search (search for generating a plan)
+*** <5-> State Representation
+- <6-> Conjunction of ground, functionless terms (fluents)
+  - examples: Poor ^ Unknown; At(Truck1, Melbourne)
+- <6-> Close world assumption
+  - <7-> fluents that are not mentioned are false
+  - <7-> objects with unique names are distinct
+- <8-> =at(Truck1,y)?=, =-Wealthy?=, =At(Father(Fred),Sydney)=,
+  =On(blockA, blockB) V On (blockA, blockC)= 
+** Review
+*** Action Representation
+- as action schemas 
+- single schema represents a set of ground actions
+:     Action(Fly(p, from, to),
+  :      PRECOND: At(p,from) ^ Plane (p) ^ Airport (from) 
+:                 ^ Airport (to)
+   :     EFFECT: -At(p,from) ^ At(p,to))
+- Universally quantified
+- applicable in states where all the preconditions are satisfied
+- delete list: remove fluents that appear as negative literals in effects
+- add list: add fluents that appear as positive literals in effects
+
+* PDDL
+** PDDL Formulation
+*** questions
+ :PROPERTIES:
+ :BEAMER_col: 0.5
+ :BEAMER_env: ignoreheading
+ :END:
+- <1-> What predicates would you use to represent the problem?
+  - <2-> =clear(), on(), smaller(), disk()=
+- <3-> What is the initial state?
+  - <4-> =on(Red, Green), on(Green, Blue)=,
+         =on(Blue, A), clear(Red), disc(Red) ...=
+         =clear(B), clear(C), smaller(Red, Green)= 
+         =smaller(Red, Blue), smaller(Red, A)= ... 
+- <5-> What is the goal state?
+  - <6-> =on(Red, Green), on(Green, Blue), on(Blue, C)=
+*** toh
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 0.5
+:END:
+ #+CAPTION: objects: disks - red, green, blue; pegs - A, B, C
+ #+ATTR_LaTeX: width=5cm
+ [[file:../images/torrehanoi.png]]
+*** actions
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 1.0
+:END:
+- <7-> How are actions defined?
+  - <8-> =Action(move(disk, source, destination)=\\
+             =PRECOND: clear(disk) ^ on(disk, source) ^ clear(destination)
+    ^smaller(disk,destination)=\\
+             =EFFECT: on(disk, destination) ^ -on(disk, source) ^ -clear(destination) ^clear(source)=
+* Planning Graph
+** Planning Graph Review
+*** <1-> Directed graph
+- <1-> organized into levels
+- <1-> level $S_0$ is the initial state that consists of fluents that hold
+  in $S_0$
+- <1-> level $A_0$ consisting of actions applicable in $S_0$.
+- <1-> Alternate $S_i$ and $A_i$ until termination
+- <1-> persistence actions and mutex
+*** <2-> image
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 1.0
+:END:
+ #+ATTR_LaTeX: width=10cm
+[[file:../images/eatcake-graphplan2.eps]]
+*** Uses
+- for generating plans
+- for heuristic estimation
+** Spare Tire Example (in book)
+#+begin_example
+Init(Tire(Flat) ^ Tire(Spare) ^ At(Flat,Axle) ^ at(Spare,Trunk))
+Goal(At(Spare,Axle))
+Action(Remove(obj,loc),
+    PRECOND: At(obj,loc)
+    EFFECT: -At(obj,loc) ^ At(obj,ground))
+Action(PutOn(t,Axle),
+    PRECOND: Tire(t) ^ At(t,Ground) ^ -At(Flat,Axle)
+    EFFECT: -At(t,Ground) ^ At(t,Axle)
+Action(LeaveOvernight)
+    PRECOND:
+    EFFECT: -At(Spare,Ground) ^ -At(Spare,Axle) ^ -At(Spare,Trunk) 
+            ^-At(Flat,Ground) ^ -At(Flat,Axle) ^-At(Flat,Trunk)
+#+end_example
+** Spare Tire Example (in book)
+#+ATTR_LaTeX: width=10cm
+[[file:../images/tire-graphplan2-no-mutex.eps]]
+- <1-> Mutex actions?
+  - <2-> Inconsistent effects? 
+    - <3-> one action negates an effect of the other
+    - <8-> =Remove(Spare,Trunk)= with =LeaveOvernight=
+  - <4-> Interference?
+    - <5-> one of the effects of an action is the negation of a
+      precondition of the other 
+    - <8-> =Remove(Flat,Axle)= with =LeaveOvernight=
+  - <6-> Competing needs?
+    - <7-> One of the preconditions of one action is mutually
+      exclusive with a precondition of the other
+    - <8-> =PutOn(Spare,Axle)= with =Remove(Flat,Axle)=
+** Spare Tire Example (in book)
+#+ATTR_LaTeX: width=10cm
+[[file:../images/tire-graphplan2-no-mutex.eps]]
+- <1-> Mutex literals?
+  - <1-> Negated literal?
+  - <2-> Inconsistent support?
+    - <3-> if each possible pair of actions that achieve the two
+      literal is mutex
+    - <4-> =At(Spare, Axle)= with =At(Flat,Axle)= in S2
+** Extract Solution
+#+ATTR_LaTeX: width=10cm
+[[file:../images/tire-graphplan2.eps]]
+*** Extract Solution can be formulated as CSP or backward search
+*** As a CSP
+- variables? values?
+- constraints?
+*** As backward search
+- Initial state?
+- Goal?
+- Actions?
+- Cost
+

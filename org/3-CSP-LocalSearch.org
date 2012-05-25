@@ -1,0 +1,121 @@
+#+TITLE:   CSP and Local Search
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DATE:      February 03, 2012
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+* Contraint Satisfaction
+** Cryptogram
+A cryptogram is a type of puzzle which consists of a short piece of
+encrypted text such that each letter of the alphabet (A-Z) is mapped
+to a different letter (A-Z). Spaces are preserved. The assignments are
+consistent. \\
+\\
+*** <1-> Cipher 
+=GEBO TEV E CWAACK CEGN=
+
+*** <2-> Letter Map\\
+=abcdefghijklmnopqrstuvwxyz=\\
+=trl.a.m...e..by...oh.di...=
+
+*** <3-> Decrypted string: 
+=MARY HAD A LITTLE LAMB=
+
+*** <4-> Used extensively in telegrams in World War I
+Zimmermann Telegram: proposal from the German Empire to Mexico to make
+war againts US. intercepted by the British and decrypted
+
+** Cryptogram as a CSP
+*** <1-> Cryptograms can be modeled as CSPs
+*** <2-> Example Problem
+=ABC DC EFG HGIIJK FBE=
+
+
+1. What are the variables?
+2. What is the domain of those variables?
+3. What are the constraints?
+** Cryptogram as a CSP
+Cipher: =ABC DC EFG HGIIJK FBE=\\
+Plain text: =?=
+
+- <1-> Treating each word as a variable, identify word pairs that have a constraint between them. Draw a constraint graph.
+- <2->  We use a dictionary to find the domain of each variable. \\
+  =Dom(ABC) = Dom(EFG) = Dom(FBE) = {DOG, MAN, THE, HAT }=\\
+  =Dom(DC) = {IN, MY, TO}=\\
+  =Dom(HGIIJK) = {BATTER, SUDDEN, YELLOW}=\\
+- <3-> Solve the cryptogram by using backtracking search (without forward checking) assigning variables from left to right.
+- <4->  How would the search change if forward checking was allowed?
+
+* Local Search
+** Traveling Salesman Problem
+*** A problem in graph theory requiring the most efficient (i.e., least total distance) Hamiltonian cycle a salesman can take through each of  cities.
+*** <2-> No general method of solution is known, and the problem is NP-hard.
+** Small Traveling Salesman Problem
+A traveler needs to visit 4 cities. He knows the distance between each
+pair of cities. His aim to figure out the shortest route that visits
+all the cities.  \\
+Distances between cities. \\
+=A-B 6=\\
+=A-C 1=\\
+=A-D 5=\\
+=B-C 3=\\
+=B-D 2=\\
+=C-D 4=\\
+** Local Search for Traveling Salesman Problem
+- State space: a set of all possible tours, e.g. ABCD, ACBD etc
+- Operators: change position of adjacent cities within the current tour
+- Heuristic function - length of the tour
+- Initial State - ABCD
+
+- Distances between cities. \\
+   =A-B 6=\\
+   =A-C 1=\\
+   =A-D 5=\\
+   =B-C 3=\\
+   =B-D 2=\\
+   =C-D 4=\\
+
+- Perform steepest descent.
+
+
+
+* Homework
+** Pay attention to
+- algorithms specified in the homework questions.
+- difference between a 'state' of the world and a 'node'

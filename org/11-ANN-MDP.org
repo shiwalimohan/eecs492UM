@@ -1,0 +1,151 @@
+#+TITLE:   Artificial Neural Networks \\~ Markov Decision Processes
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+* Artificial Neural Networks
+** Perceptron Review
+#+ATTR_LaTeX: width=10cm
+[[file:../images/neuron-unit.eps]]
+** Perceptron Design
+*** <1-> Implement $X \vee Y$ using a single perceptron unit. Assume bias input -1.
+*** <2-> Image
+:PROPERTIES:
+ :BEAMER_col: 0.2
+ :BEAMER_env: ignoreheading
+ :END:
+#+ATTR_LaTeX: width=4cm
+[[file:../images/nn.pdf]]
+*** <2-> Table
+:PROPERTIES:
+ :BEAMER_col: 0.2
+ :BEAMER_env: ignoreheading
+ :END:
+|------------+-----|
+| W_{AC}     |   1 |
+| W_{BC}     |   1 |
+| W_{bias,C} | 0.5 |
+|------------+-----|
+
+** Perceptron Network Design
+*** <1-> Imlement $X \oplus Y$ using a preceptron network.
+*** <2-> Image
+:PROPERTIES:
+ :BEAMER_col: 0.3
+ :BEAMER_env: ignoreheading
+ :END:
+#+ATTR_LaTeX: width=6cm
+[[file:homework/nn2.pdf]]
+*** <2-> Table
+:PROPERTIES:
+ :BEAMER_col: 0.5
+ :BEAMER_env: ignoreheading
+ :END:
+|------------+-----|
+| W_{AC}     |   1 |
+| W_{AD}     |  -1 |
+| W_{BC}     |  -1 |
+| W_{BD}     |   1 |
+| W_{bias,C} | 0.5 |
+| W_{CE}     |   1 |
+| W_{bias,D} | 0.5 |
+| W_{DE}     |   1 |
+| W_{bias,E} | 0.5 |
+|------------+-----|
+
+** Perceptron Network Design
+*** <1-> Suppose that after training for a long time, the weights of a 3 input (A, B, C) perceptron converge to the values Wa = 1, Wb = 0.5, Wc = 0.5, W0 = -0.75 (bias input is 1). Approximately what Boolean function has the perceptron learned? (Express in logical form as a function of the inputs A, B, and C. You can assume that the inputs take on values of either 0 (false) or 1 (true)). Use step function for activation.
+*** <2-> 
+|---+---+---+------------+---------+------------|
+| A | B | C | W0 (-0.75) | Sum(wx) | G(Sum(wx)) |
+|---+---+---+------------+---------+------------|
+| 0 | 0 | 0 |          1 |   -0.75 |          0 |
+| 0 | 0 | 1 |          1 |   -0.25 |          0 |
+| 0 | 1 | 0 |          1 |   -0.25 |          0 |
+| 0 | 1 | 1 |          1 |    0.25 |          1 |
+| 1 | 0 | 0 |          1 |    0.25 |          1 |
+| 1 | 0 | 1 |          1 |    0.75 |          1 |
+| 1 | 1 | 0 |          1 |    0.75 |          1 |
+| 1 | 1 | 1 |          1 |    1.25 |          1 |
+|---+---+---+------------+---------+------------|
+
+$A \vee B \wedge C$
+
+* MDP and Learning
+** MDP review
+*** <1-> What kinds of problems can we reason about with MDPs?
+**** <2-> MDPs are used for making decisions about how to act in a world. The basic setup is that we have an agent who gets some information about the world, takes an action, gets a reward. The goal is to learn an action plan that will maximize reward.
+*** <3-> What is the Markov assumption?
+**** <4-> The future is independent of the past, given the present.
+*** <5-> How is an MDP defined?
+**** <6-> States, actions, transition models, rewards
+*** <7-> Algorithm for solving MDP.
+**** Value iteration.
+** Value Iteration Example
+*** <2-> Image
+:PROPERTIES:
+ :BEAMER_col: 0.4
+ :BEAMER_env: ignoreheading
+ :END:
+#+ATTR_LATEX: width=5cm
+[[file:../images/domain.pdf]]
+
+*** <2-> Data
+:PROPERTIES:
+ :BEAMER_col: 0.5
+ :BEAMER_env: ignoreheading
+ :END:
+
+- *Actions*: forward, back, left, right, idle, pick-up
+- *Rewards*: pick-up treasure: 100, move: -5, idle: none
+- *Transition*: 0.8 move intended, 0.1 move to left, 0.1 move to right
+
+*** <3-> Questions
+:PROPERTIES:
+ :BEAMER_col: 1.0
+ :BEAMER_env: ignoreheading
+ :END:
+ - Formulate the problem as an MDP
+ - Compute utilities and optimal policy in the first iteration.
+ - In second iteration.
+ - Sketch an optimal policy.
+** Reinforcement Learning
+- What if rewards were not known?
+- Review TD/Q learning.
+

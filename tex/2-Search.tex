@@ -1,0 +1,84 @@
+% Created 2012-05-25 Fri 12:20
+\documentclass[compress, 9pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\usetheme{default}
+\usecolortheme[RGB={0,38,93}]{structure}
+\usefonttheme{serif}
+\useinnertheme{circles}
+\useoutertheme[]{shadow}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{natbib}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{bibentry}
+\institute{Computer Science and Engineering \\ University of Michigan}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{Search}
+\author{Shiwali Mohan}
+\date{January 27, 2012}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Outline}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+
+
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+
+
+
+\begin{frame}
+\frametitle{A Water Jug Problem}
+\label{sec-1}
+
+The agent is given two jugs, a 4-gallon one and a 3-gallon
+one. Neither has any measuring markers on it. The is an infinite
+source/sink of water. How can the agent get exactly 1 gallons of water
+into the 3-gallon jug?
+\end{frame}
+\begin{frame}
+\frametitle{Problem Formulation}
+\label{sec-2}
+
+\begin{itemize}
+\item How would you represent state? How many states can be represented?
+\item What is the initial state?
+\item What is the goal state? How many states satisfy the goal test?
+\item What are the actions?
+\item What is the path cost?
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Search Space for Water Jug}
+\label{sec-3}
+
+\centering
+\includegraphics[width=1.0\textwidth]{../images/water-jug.eps}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,147 @@
+#+TITLE:   Propositional Logic
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+* Translation
+** Translate to Propositional Logic
+=p=: You get an A on the final exam \\
+=q=: You do every exercise in the book \\
+=r=: You get an A in this class \\
+- <2-> You get an A in this class, but you do not do every exercise in the
+  book 
+- <3-> $r \wedge -q$
+- <4-> If you got an A in this class, you must have gotten an A on the
+   final. 
+- <5-> $r \Rightarrow p$
+- <6-> Getting an A on the final and doing every exercise in the book is
+   sufficient for getting an A in this class
+- <7-> $p \wedge q \Rightarrow r$
+- <8-> You cannot get an A in this class if you do not do every exercise
+  in the book, unless you get an A on the final.
+- <9-> $-q \Rightarrow (-p \Rightarrow -r)$ or $-q \wedge -p \Rightarrow -r$
+- <10-> why?
+* Valid, Satisfiable, Unsatisfiable
+** Determine if valid/satisfiable/unsatisfiable
+- <1-> RockStar \vee -RockStar
+- <2-> valid, satisfiable
+- <3-> BigHouse \wedge -BigHouse
+- <4-> unsatisfiable
+- <5-> Raining \wedge Rainbow
+- <6-> satisfiable
+- <7-> $(-P \vee -Q) \Rightarrow ((-P \wedge Q) \vee (P \wedge -Q) \vee
+  (-P \wedge -Q))$
+- <8-> valid, satisfiable
+- <9-> $((-P \vee P) \Rightarrow Q) \wedge (Q \Rightarrow (P \wedge
+  -P))$
+- <10-> unsatisfiable
+* Resolution
+** Resolution by Contradiction
+Sentence:  
+- Heads I win; tails, you lose
+- <2-> Coin must be head or tail but not both.
+- <2-> Winning and losing are complements for both you and me.
+- <2-> Exactly one of us will win.
+
+Prove: 
+- I win
+** Axioms
+- Coin must be head or tail but not both.
+  - <2-> $H \Leftrightarrow -T$
+- Winning and losing are complements for both you and me.
+  - <2-> $IW \Leftrightarrow -IL$
+  - <2-> $YW \Leftrightarrow -YL$
+- Exactly one of us will win.
+  - <2-> $IW \Leftrightarrow -YW$
+- Heads I win
+  - <2-> $H \Rightarrow IW$
+- Tails you lose
+  - <2-> $T \Rightarrow YL$
+- <3-> Next Step?
+** KB in Conjunctive Normal Form
+
+Knowledge Base\\
+| 1. $H \Leftrightarrow -T$   | 1a. $-H \vee -T$   |
+|                             | 1b. $T \vee H$     |
+| 2. $IW \Leftrightarrow -IL$ | 2a. $-IW \vee -IL$ |
+|                             | 2b. $IL \vee IW$   |
+| 3. $YW \Leftrightarrow -YL$ | 3a. $-YW \vee -YL$ |
+|                             | 3b. $YL \vee YW$   |
+| 4. $IW \Leftrightarrow -YW$ | 4a. $-IW \vee -YW$ |
+|                             | 4b. $YW \vee IW$   |
+| 5. $H \Rightarrow IW$       | 5. $-H \vee IW$    |
+| 6. $T \Rightarrow LY$       | 6. $-T \vee YL$    |
+
+To prove(\alpha): $IW$ \\
+Add -\alpha to KB
+** Resolution
+  | 1a. $-H \vee -T$   | 7. $T \vee IW$ [1b,5]       |
+  | 1b. $T \vee H$     | 8. $H \vee YL$ [1b, 6]      |
+  | 2a. $-IW \vee -IL$ | 9. $H \vee -YW$ [3a, 8]     |
+  | 2b. $IL \vee IW$   | 10. $H \vee IW$ [4b, 9]     |
+  | 3a. $-YW \vee -YL$ | 11. $-T \vee IW$ [1a, 10]   |
+  | 3b. $YL \vee YW$   | 12. $IW$ [7,11;11,13;10,18] |
+  | 4a. $-IW \vee -YW$ | 13. $T$ [0, 7; 1b,15]       |
+  | 4b. $YW \vee IW$   | 14. $YW$ [0,4b]             |
+  | 5. $-H \vee IW$    | 15. $-H$ [0,5]              |
+  | 6. $-T \vee YL$    | 16. $-IW$ [4a,14]           |
+  |                    | 17. $YL$ [15,8]             |
+  |                    | 18. $-YW$ [15,9]            |
+  |                    | 17. $empty$ [12, 0; 12,16]  |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

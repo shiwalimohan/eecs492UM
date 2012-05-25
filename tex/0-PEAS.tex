@@ -1,0 +1,110 @@
+% Created 2012-05-25 Fri 12:21
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{Dicussion Outline (January 13)}
+\author{Shiwali Mohan}
+\date{2012-01-10 Tue}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+
+
+\section{Revision of PEAS terminology}
+\label{sec-1}
+
+performance, environment, actuators, sensors
+stress on why it is important to characterize a task.
+\section{Properties of task environment}
+\label{sec-2}
+\subsection{Observability}
+\label{sec-2-1}
+
+\begin{itemize}
+\item partially observable only if the unperceived information is
+  \emph{relevant} to the action choice. eg: a cleaning agent vacuuming a
+  room does not need to know about the weather to plan, make a decision.
+\item arises because of noisy sensors, lack of sensory data
+\end{itemize}
+\subsection{Single agent v/s multi agent}
+\label{sec-2-2}
+
+\begin{itemize}
+\item difference between an \emph{agent} and an \emph{object}.
+\item competitive, cooperative
+\end{itemize}
+\subsection{Determinism}
+\label{sec-2-3}
+
+\begin{itemize}
+\item stochastic process generates next state
+\item also related to observability of the environment
+\end{itemize}
+\subsection{Episodic v/s sequential}
+\label{sec-2-4}
+
+different for different formulations
+\begin{itemize}
+\item A single firefighting task is sequential, however one expedition
+    does not affect others.
+\end{itemize}
+\subsection{Static v/s dynamic}
+\label{sec-2-5}
+
+environment changes during deliberation. strategy games v/s action games
+\subsection{Discrete v/s continuous}
+\label{sec-2-6}
+
+continuous state, time, percepts, actions 
+\subsection{Known v/s unknown}
+\label{sec-2-7}
+
+model of the environment v/s learning
+\section{Examples}
+\label{sec-3}
+
+
+\begin{center}
+\begin{tabular}{l}
+ Domain                           \\
+\hline
+ Missionaries and Cannibals       \\
+ Super Mario                      \\
+ Robo-soccer                      \\
+ Driving domain                   \\
+ Fire-fighting domain             \\
+ Hand-written Number Recognition  \\
+ Siri                             \\
+\end{tabular}
+\end{center}
+\section{Evaluation}
+\label{sec-4}
+
+\begin{itemize}
+\item How to evaluate an agent's performance? Discuss wrt examples in the
+  previous section. Evaluation should be done in multiple scenarios. 
+  Introduce the concept of false positives/negatives; eg: hand-written
+  number recognition.
+\end{itemize}
+
+\end{document}

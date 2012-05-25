@@ -1,0 +1,155 @@
+#+TITLE:   First-Order Logic
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+* Translation
+** Translate the following sentences
+- <1-> Every gardener likes the sun.
+  - <2-> \forall x. gardener(x) \Rightarrow likes(x,Sun)
+- <3-> You can fool some of the people all of the time.
+  - <4-> \exists x. (person(x) \wedge \forall t.(time(t) \Rightarrow can-fool(x,t)))
+- <5-> You can fool all of the people some of the time.
+  - <6-> \forall x. (person(x) \Rightarrow \exists t. (time(t) \wedge can-fool(x,t)))
+- <7-> All purple mushrooms are poisonous.
+  - <8-> \forall x. (mushroom(x) \wedge purple(x)) \Rightarrow poisonous(x)
+- <9-> There are exactly two purple mushrooms.
+  - <10-> (\exists x.\exists y. mushroom(x) \wedge purple(x) \wedge
+    mushroom(y) \wedge purple(y) \wedge -(x=y)) \wedge (\forall z. (mushroom(z) \wedge purple(z)) \Rightarrow ((x=z) \vee (y=z)))
+* Unification
+** Determine a valid substitution
+- <1-> parents(x, father(x), mother(Bill));	parents(Bill, father(Bill), y)
+   - <2-> {x/Bill, y/mother(Bill)}
+- <3-> parents(x, father(x), mother(Bill));	parents(Bill, father(y), z)
+   - <4-> {x/Bill, y/Bill, z/mother(Bill)}
+- <5-> parents(x, father(x), mother(Jane));	parents(Bill, father(y), mother(y))	
+   - <6-> Failure
+
+* CNF conversion
+** Convert to CNF
+\forall x.(P(x) \Rightarrow (\forall y.(P(y) \Rightarrow P(f(x,y))) \wedge -\forall y.(Q(x,y) \Rightarrow P(y))))
+- <2-> Eliminate implication
+  - <3-> \forall x.(-P(x) \vee (\forall y.(-P(y) \vee P(f(x,y))) \wedge -\forall y.(-Q(x,y) \vee P(y))))
+- <4-> Move - inwards
+  - <5-> \forall x.(-P(x) \vee (\forall y.(-P(y) \vee P(f(x,y))) \wedge \exists y.(Q(x,y) \wedge -P(y))))
+- <6-> Standardize Variables
+  - <7-> \forall x.(-P(x) \vee (\forall y.(-P(y) \vee P(f(x,y))) \wedge \exists z.(Q(x,z) \wedge -P(z))))
+- <8-> Skolemize
+  - <9-> \forall x.(-P(x) \vee (\forall y.(-P(y) \vee P(f(x,y))) \wedge (Q(x,g(x)) \wedge -P(g(x)))))
+- <10-> Drop universal 
+  - <11->(-P(x) \vee ((-P(y) \vee P(f(x,y))) \wedge (Q(x,g(x)) \wedge -P(g(x)))))
+- <12-> Distribute 'or' over 'and'
+  - <13-> (-P(x) \vee -P(y) \vee P(f(x,y))) \wedge (-P(x) \vee Q(x,g(x)))
+    \wedge (-P(x) v -P(g(x))
+- <14-> Create separate clauses
+  - <15-> -P(x) \vee -P(y) \vee P(f(x,y))
+  - <15-> -P(x) \vee Q(x,g(x))
+  - <15-> -P(x) \vee -P(g(x))
+- <16-> Standardize variables
+  - <16-> -P(x) \vee -P(y) \vee P(f(x,y))
+  - <16-> -P(z) \vee Q(z,g(z))
+  - <16-> -P(w) \vee -P(g(w))
+
+* FOL Resolution
+** Resolution by Refutation
+*Knowledge Base*: \\
+Tony, Sam and Ellen belong to the Activity Club. Every member of the
+Activity Club is either a skier or a mountain climber or both. No mountain
+climber likes rain, and all skiers like snow. Ellen dislikes whatever
+Tony likes and likes everything that Tony dislikes. Tony likes rain and snow.
+\\
+\\
+
+*Question*: \\
+Which member of the Activity Club is a mountain climber but not a skier?
+** Translate to FOL Sentences
+member(x) means is a member of activity club, S(x) means x is a skier, M(x) means x is a mountain climber, and L(x,y) means x likes y
+- Every member of the Activity Club is either a skier or a mountain
+  climber or both.
+  - <2-> \forall x. member(x) \Rightarrow (S(x) \vee M(x))
+- No mountain climber likes rain
+  - <3-> -\exists x. M(x) \wedge L(x, Rain)
+- All skiers like snow.
+  - <4->  \forall x. S(x) \Rightarrow L(x, Snow)
+- Tony, Sam and Ellen belong to the Activity Club.
+  - <5-> member(Tony)
+  - <5-> member (Sam)
+  - <5-> member (Ellen)
+- Ellen dislikes whatever Tony likes and likes everything that Tony dislikes.
+  - <6-> \forall y. L(Ellen, y) \Leftrightarrow -L(Tony, y)
+- Tony likes rain and snow.
+  - <7-> L(Tony, Rain)
+  - <7-> L(Tony, Snow)
+- Which member of the Activity Club who is a mountain climber but not
+  a skier?
+  - <8-> Query (\exists x. member(x) \wedge M(x) \wedge -S(x))
+  - <8-> Negation of the Query or Answer literal (-\exists
+    x. member(x) \wedge M(x) \wedge -S(x)) \vee Ans(x)
+** CNF
+\hspace{0}
+| \forall x. member(x) \Rightarrow S(x) \vee M(x)              | 1. -member(x1) \vee S(x1) \vee M(x1) |
+| -\exists x. M(x) \wedge L(x, Rain)                           | 2. -M(x2) \vee -L(x2, Rain)         |
+| \forall x. S(x) \Rightarrow L(x, Snow)                       | 3. -S(x3) \vee L(x3, Snow)          |
+| member(Tony)                                                 | 4. member(Tony)                     |
+| member (Sam)                                                 | 5. member(Sam)                      |
+| member (Ellen)                                               | 6. member(Ellen)                    |
+| \forall y. L(Ellen, y) \Leftrightarrow -L(Tony, y)           | 7. -L(Tony, x4) \vee -L(Ellen, x4)  |
+|                                                              | 8. L(Tony, x5) \vee L(Ellen, x5)    |
+| L(Tony, Rain)                                                | 9. L(Tony, Rain)                    |
+| L(Tony, Snow)                                                | 10. L(Tony, Snow)                   |
+| (-\exists x. member(x) \wedge M(x) \wedge -S(x)) \vee Ans(x) | 11. (-member(x7) \vee -M(x7)        |
+|                                                              | \vee S(x7) \vee Ans(x7)             |
+
+** Resolution
+  1. -member(x1) \vee S(x1) \vee M(x1)                                                                  
+  2. -M(x2) \vee -L(x2, Rain)                                                          
+  3. -S(x3) \vee L(x3, Snow)                                                           
+  4. member(Tony)                                                                      
+  5. member(Sam)                                                                       
+  6. member(Ellen)                                                                     
+  7. -L(Tony, x4) \vee -L(Ellen, x4)                                                   
+  8. L(Tony, x5) \vee L(Ellen, x5)                                                     
+  9. L(Tony, Rain)                                                                     
+  10. L(Tony, Snow)                                                                    
+  11. (-member(x7) \vee -M(x7) \vee S(x7)) \vee Ans(x7)                                
+  12. <2-> S(x1) \vee (-member(x1) \vee Ans(x1)) [11,1]      {x7/x1}                        
+  13. <3-> L(x1, Snow) \vee (-member(x1) \vee Ans(x1)) [12,3] {x3/x1}                       
+  14. <4-> -L(Tony, Snow) \vee (-member(Ellen) \vee Ans(Ellen)) [13,7] {x4/Snow, x1/Ellen}  
+  15. <5-> -member(Ellen) v Ans(Ellen) [14,7] {\}                                               
+  16. <6 -> Ans(Ellen) [15,6] {\}                                                            

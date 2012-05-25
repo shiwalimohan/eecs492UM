@@ -1,0 +1,64 @@
+% Created 2012-05-25 Fri 12:21
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{Two banks are on the x axis. Left-bank is at lbx=0 and right-bank is}
+\author{Shiwali Mohan}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\vspace*{1cm}
+at rbx=20. Agent's location on the number line is at 0<=a<=20. The agent
+has 5\$. If it goes to left-bank, it can get 20\$. If it goes to the
+right-bank, it can get 10\$. However, in order to get to the bank the
+agent has to spend money at the rate of 2*(distance from the
+bank). The agent has three actions - go-left, go-right and stay. The
+agent wants to maximize the money it has. Assume that the location of
+the agent is an integer.
+
+\section{Table based agent: for every location, compute the total money with}
+\label{sec-1}
+
+ the agent on going-left, going-right, stay. Choose action
+ accordingly. 20 entries in the table.
+\section{Threshold agent: if the location of the agent is less than 10,}
+\label{sec-2}
+
+ go-left, if greater than 15, go-right. between 10-15, stay.
+\section{Change cost of moving: if the cost of moving changes from}
+\label{sec-3}
+
+ 2*(distance from the bank) to 2.5*(distance from the bank). How does
+ the threshold change? stay if between 8-16.
+\section{Left-bank might be closed with a probability of 0.25, right-bank}
+\label{sec-4}
+
+ might be closed with a probability of 0.20. The cost of going to
+ each bank is 2*(distance from the bank). The expected value of
+ going to each bank changes (left-bank: 15, right-bank: 8), changing
+ the `stay' threshold to 7.5-16.
+
+\end{document}

@@ -1,0 +1,138 @@
+#+TITLE:   Real World Planning
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+* Real World Planning
+** Review
+- Classical Planning
+  - fully observable
+  - deterministic
+  - finite
+  - static
+  - discrete
+** Review
+*** (non) Classical Planning (for uncertainty)
+  - +fully observable+ partially observable 
+  - +deterministic+ non deterministic
+  - finite
+  - static
+  - discrete
+*** <2-> Approaches
+  - Sensorless Planning
+  - Conditional Planning
+  - Execution Monitoring and Replanning
+  - Uncertainty Modeling 
+** Weighty Tower of Hanoi
+*** Facts
+:PROPERTIES:
+ :BEAMER_col: 0.6
+ :BEAMER_env: ignoreheading
+ :END:
+**** <1-> Similar to regular Tower of Hanoi
+***** disk are to be ordered by their weight
+***** =clear(), on(), smaller(), disk()=
+***** <2-> =clear(), on()=, +smaller()+ _lighter()_, =disk()=
+**** <3-> Initial state
+  =on(Red, Green), on(Green, Blue)=,
+  =on(Blue, A), clear(Red), disc(Red), disc(Green), disk(Blue)=
+  =clear(B), clear(C), lighter(Red, A), lighter(Red, B)= ...
+*** toh
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 0.5
+:END:
+ #+CAPTION: objects: disks - red, green, blue; pegs - A, B, C
+ #+ATTR_LaTeX: width=4cm
+ [[file:../images/newtoh.eps]]
+
+*** Action
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 1.0
+:END:
+**** <4-> Action
+=Action(move(disk, source, destination)=\\
+             =PRECOND: clear(disk) ^ on(disk, source) ^ clear(destination)=
+    =^lighter(disk,destination)=\\
+             =EFFECT: on(disk, destination) ^ -on(disk, source) ^ -clear(destination) ^clear(source)=
+
+** Weighty Tower of Hanoi
+*** <1-> Can we do sensorless planning?
+*** <2-> How would the agent do conditional planning?
+*** <3-> Percept Schema
+=Percept(lighter(d1,d2)=\\
+   =PRECOND: disk(d1) ^ disk(d2) ^ comparing(d1,d2))=
+*** <4-> Information-gathering Action
+=Action(compare-weight(d1,d2)=\\
+   =PRECOND: disk(d1) ^ disk(d2) ^ clear(d1) ^ clear(d2)=\\
+   =EFFECT: comparing(d1,d2))=
+
+** Slippery Tower of Hanoi
+*** Facts
+:PROPERTIES:
+ :BEAMER_col: 0.5
+ :BEAMER_env: ignoreheading
+ :END:
+**** <1-> Similar to regular Tower of Hanoi
+  - =clear(), on(), smaller(), disk()=
+  - the gripper is slippery. sometimes the disk is displaced to the
+    destination but at others it remains at the source.
+**** <2-> Initial state?
+**** <3-> Goal State?
+*** toh
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 0.5
+:END:
+ #+CAPTION: objects: disks - red, green, blue; pegs - A, B, C
+ #+ATTR_LaTeX: width=5cm
+[[file:../images/torrehanoi.png]]
+
+*** Action
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 1.0
+:END:
+**** <4-> Action
+=Action(move(disk, source, destination)=\\
+             =PRECOND: clear(disk) ^ on(disk, source) ^ clear(destination)
+    ^smaller(disk,destination)=\\
+             =EFFECT: (on(disk, destination) ^ -on(disk, source) ^=
+             =-clear(destination) ^clear(source)) V (on(disk, source))=
+* SGP Demo

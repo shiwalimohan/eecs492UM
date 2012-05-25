@@ -1,0 +1,259 @@
+% Created 2012-05-25 Fri 12:20
+\documentclass[compress, 9pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\usetheme{default}
+\usecolortheme[RGB={0,38,93}]{structure}
+\usefonttheme{serif}
+\useinnertheme{circles}
+\useoutertheme[]{shadow}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{natbib}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{bibentry}
+\institute{Computer Science and Engineering \\ University of Michigan}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{First-Order Logic}
+\author{Shiwali Mohan}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Outline}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+
+
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+
+
+\section{Translation}
+\label{sec-1}
+\begin{frame}
+\frametitle{Translate the following sentences}
+\label{sec-1-1}
+
+\begin{itemize}
+\item <1-> Every gardener likes the sun.
+\begin{itemize}
+\item <2-> $\forall$ x. gardener(x) $\Rightarrow$ likes(x,Sun)
+\end{itemize}
+\item <3-> You can fool some of the people all of the time.
+\begin{itemize}
+\item <4-> $\exists$ x. (person(x) $\wedge$ $\forall$ t.(time(t) $\Rightarrow$ can-fool(x,t)))
+\end{itemize}
+\item <5-> You can fool all of the people some of the time.
+\begin{itemize}
+\item <6-> $\forall$ x. (person(x) $\Rightarrow$ $\exists$ t. (time(t) $\wedge$ can-fool(x,t)))
+\end{itemize}
+\item <7-> All purple mushrooms are poisonous.
+\begin{itemize}
+\item <8-> $\forall$ x. (mushroom(x) $\wedge$ purple(x)) $\Rightarrow$ poisonous(x)
+\end{itemize}
+\item <9-> There are exactly two purple mushrooms.
+\begin{itemize}
+\item <10-> ($\exists$ x.$\exists$ y. mushroom(x) $\wedge$ purple(x) $\wedge$
+    mushroom(y) $\wedge$ purple(y) $\wedge$ -(x=y)) $\wedge$ ($\forall$ z. (mushroom(z) $\wedge$ purple(z)) $\Rightarrow$ ((x=z) $\vee$ (y=z)))
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section{Unification}
+\label{sec-2}
+\begin{frame}
+\frametitle{Determine a valid substitution}
+\label{sec-2-1}
+
+\begin{itemize}
+\item <1-> parents(x, father(x), mother(Bill));     parents(Bill, father(Bill), y)
+\begin{itemize}
+\item <2-> \{x/Bill, y/mother(Bill)\}
+\end{itemize}
+\item <3-> parents(x, father(x), mother(Bill));     parents(Bill, father(y), z)
+\begin{itemize}
+\item <4-> \{x/Bill, y/Bill, z/mother(Bill)\}
+\end{itemize}
+\item <5-> parents(x, father(x), mother(Jane));     parents(Bill, father(y), mother(y))
+\begin{itemize}
+\item <6-> Failure
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section{CNF conversion}
+\label{sec-3}
+\begin{frame}
+\frametitle{Convert to CNF}
+\label{sec-3-1}
+
+$\forall$ x.(P(x) $\Rightarrow$ ($\forall$ y.(P(y) $\Rightarrow$ P(f(x,y))) $\wedge$ -$\forall$ y.(Q(x,y) $\Rightarrow$ P(y))))
+\begin{itemize}
+\item <2-> Eliminate implication
+\begin{itemize}
+\item <3-> $\forall$ x.(-P(x) $\vee$ ($\forall$ y.(-P(y) $\vee$ P(f(x,y))) $\wedge$ -$\forall$ y.(-Q(x,y) $\vee$ P(y))))
+\end{itemize}
+\item <4-> Move - inwards
+\begin{itemize}
+\item <5-> $\forall$ x.(-P(x) $\vee$ ($\forall$ y.(-P(y) $\vee$ P(f(x,y))) $\wedge$ $\exists$ y.(Q(x,y) $\wedge$ -P(y))))
+\end{itemize}
+\item <6-> Standardize Variables
+\begin{itemize}
+\item <7-> $\forall$ x.(-P(x) $\vee$ ($\forall$ y.(-P(y) $\vee$ P(f(x,y))) $\wedge$ $\exists$ z.(Q(x,z) $\wedge$ -P(z))))
+\end{itemize}
+\item <8-> Skolemize
+\begin{itemize}
+\item <9-> $\forall$ x.(-P(x) $\vee$ ($\forall$ y.(-P(y) $\vee$ P(f(x,y))) $\wedge$ (Q(x,g(x)) $\wedge$ -P(g(x)))))
+\end{itemize}
+\item <10-> Drop universal
+\begin{itemize}
+\item <11->(-P(x) $\vee$ ((-P(y) $\vee$ P(f(x,y))) $\wedge$ (Q(x,g(x)) $\wedge$ -P(g(x)))))
+\end{itemize}
+\item <12-> Distribute `or' over `and'
+\begin{itemize}
+\item <13-> (-P(x) $\vee$ -P(y) $\vee$ P(f(x,y))) $\wedge$ (-P(x) $\vee$ Q(x,g(x)))
+    $\wedge$ (-P(x) v -P(g(x))
+\end{itemize}
+\item <14-> Create separate clauses
+\begin{itemize}
+\item <15-> -P(x) $\vee$ -P(y) $\vee$ P(f(x,y))
+\item <15-> -P(x) $\vee$ Q(x,g(x))
+\item <15-> -P(x) $\vee$ -P(g(x))
+\end{itemize}
+\item <16-> Standardize variables
+\begin{itemize}
+\item <16-> -P(x) $\vee$ -P(y) $\vee$ P(f(x,y))
+\item <16-> -P(z) $\vee$ Q(z,g(z))
+\item <16-> -P(w) $\vee$ -P(g(w))
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section{FOL Resolution}
+\label{sec-4}
+\begin{frame}
+\frametitle{Resolution by Refutation}
+\label{sec-4-1}
+
+\textbf{Knowledge Base}: \\
+Tony, Sam and Ellen belong to the Activity Club. Every member of the
+Activity Club is either a skier or a mountain climber or both. No mountain
+climber likes rain, and all skiers like snow. Ellen dislikes whatever
+Tony likes and likes everything that Tony dislikes. Tony likes rain and snow.
+\\
+\\
+
+\textbf{Question}: \\
+Which member of the Activity Club is a mountain climber but not a skier?
+\end{frame}
+\begin{frame}
+\frametitle{Translate to FOL Sentences}
+\label{sec-4-2}
+
+member(x) means is a member of activity club, S(x) means x is a skier, M(x) means x is a mountain climber, and L(x,y) means x likes y
+\begin{itemize}
+\item Every member of the Activity Club is either a skier or a mountain
+  climber or both.
+\begin{itemize}
+\item <2-> $\forall$ x. member(x) $\Rightarrow$ (S(x) $\vee$ M(x))
+\end{itemize}
+\item No mountain climber likes rain
+\begin{itemize}
+\item <3-> -$\exists$ x. M(x) $\wedge$ L(x, Rain)
+\end{itemize}
+\item All skiers like snow.
+\begin{itemize}
+\item <4->  $\forall$ x. S(x) $\Rightarrow$ L(x, Snow)
+\end{itemize}
+\item Tony, Sam and Ellen belong to the Activity Club.
+\begin{itemize}
+\item <5-> member(Tony)
+\item <5-> member (Sam)
+\item <5-> member (Ellen)
+\end{itemize}
+\item Ellen dislikes whatever Tony likes and likes everything that Tony dislikes.
+\begin{itemize}
+\item <6-> $\forall$ y. L(Ellen, y) $\Leftrightarrow$ -L(Tony, y)
+\end{itemize}
+\item Tony likes rain and snow.
+\begin{itemize}
+\item <7-> L(Tony, Rain)
+\item <7-> L(Tony, Snow)
+\end{itemize}
+\item Which member of the Activity Club who is a mountain climber but not
+  a skier?
+\begin{itemize}
+\item <8-> Query ($\exists$ x. member(x) $\wedge$ M(x) $\wedge$ -S(x))
+\item <8-> Negation of the Query or Answer literal (-$\exists$
+    x. member(x) $\wedge$ M(x) $\wedge$ -S(x)) $\vee$ Ans(x)
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{CNF}
+\label{sec-4-3}
+
+\hspace{0}
+
+\begin{center}
+\begin{tabular}{ll}
+ $\forall$ x. member(x) $\Rightarrow$ S(x) $\vee$ M(x)                 &  1. -member(x1) $\vee$ S(x1) $\vee$ M(x1)  \\
+ -$\exists$ x. M(x) $\wedge$ L(x, Rain)                                &  2. -M(x2) $\vee$ -L(x2, Rain)             \\
+ $\forall$ x. S(x) $\Rightarrow$ L(x, Snow)                            &  3. -S(x3) $\vee$ L(x3, Snow)              \\
+ member(Tony)                                                          &  4. member(Tony)                           \\
+ member (Sam)                                                          &  5. member(Sam)                            \\
+ member (Ellen)                                                        &  6. member(Ellen)                          \\
+ $\forall$ y. L(Ellen, y) $\Leftrightarrow$ -L(Tony, y)                &  7. -L(Tony, x4) $\vee$ -L(Ellen, x4)      \\
+                                                                       &  8. L(Tony, x5) $\vee$ L(Ellen, x5)        \\
+ L(Tony, Rain)                                                         &  9. L(Tony, Rain)                          \\
+ L(Tony, Snow)                                                         &  10. L(Tony, Snow)                         \\
+ (-$\exists$ x. member(x) $\wedge$ M(x) $\wedge$ -S(x)) $\vee$ Ans(x)  &  11. (-member(x7) $\vee$ -M(x7)            \\
+                                                                       &  $\vee$ S(x7) $\vee$ Ans(x7)               \\
+\end{tabular}
+\end{center}
+\end{frame}
+\begin{frame}
+\frametitle{Resolution}
+\label{sec-4-4}
+
+\begin{enumerate}
+\item -member(x1) $\vee$ S(x1) $\vee$ M(x1)
+\item -M(x2) $\vee$ -L(x2, Rain)
+\item -S(x3) $\vee$ L(x3, Snow)
+\item member(Tony)
+\item member(Sam)
+\item member(Ellen)
+\item -L(Tony, x4) $\vee$ -L(Ellen, x4)
+\item L(Tony, x5) $\vee$ L(Ellen, x5)
+\item L(Tony, Rain)
+\item L(Tony, Snow)
+\item (-member(x7) $\vee$ -M(x7) $\vee$ S(x7)) $\vee$ Ans(x7)
+\item <2-> S(x1) $\vee$ (-member(x1) $\vee$ Ans(x1)) [11,1]      \{x7/x1\}
+\item <3-> L(x1, Snow) $\vee$ (-member(x1) $\vee$ Ans(x1)) [12,3] \{x3/x1\}
+\item <4-> -L(Tony, Snow) $\vee$ (-member(Ellen) $\vee$ Ans(Ellen)) [13,7] \{x4/Snow, x1/Ellen\}
+\item <5-> -member(Ellen) v Ans(Ellen) [14,7] \{\}
+\item <6 -> Ans(Ellen) [15,6] \{\}
+\end{enumerate}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,187 @@
+% Created 2012-05-25 Fri 12:20
+\documentclass[compress, 9pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\usetheme{default}
+\usecolortheme[RGB={0,38,93}]{structure}
+\usefonttheme{serif}
+\useinnertheme{circles}
+\useoutertheme[]{shadow}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{natbib}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{bibentry}
+\institute{Computer Science and Engineering \\ University of Michigan}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{CSP and Local Search}
+\author{Shiwali Mohan}
+\date{February 03, 2012}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Outline}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+
+
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+
+
+\section{Contraint Satisfaction}
+\label{sec-1}
+\begin{frame}
+\frametitle{Cryptogram}
+\label{sec-1-1}
+
+A cryptogram is a type of puzzle which consists of a short piece of
+encrypted text such that each letter of the alphabet (A-Z) is mapped
+to a different letter (A-Z). Spaces are preserved. The assignments are
+consistent. \\
+\\
+\begin{itemize}
+
+\item <1-> Cipher\\
+\label{sec-1-1-1}%
+\texttt{GEBO TEV E CWAACK CEGN}
+
+
+\item <2-> Letter Map\\\\
+\label{sec-1-1-2}%
+\texttt{abcdefghijklmnopqrstuvwxyz}\\
+\texttt{trl.a.m...e..by...oh.di...}
+
+
+\item <3-> Decrypted string:\\
+\label{sec-1-1-3}%
+\texttt{MARY HAD A LITTLE LAMB}
+
+
+\item <4-> Used extensively in telegrams in World War I\\
+\label{sec-1-1-4}%
+Zimmermann Telegram: proposal from the German Empire to Mexico to make
+war againts US. intercepted by the British and decrypted
+
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Cryptogram as a CSP}
+\label{sec-1-2}
+\begin{itemize}
+
+\item <1-> Cryptograms can be modeled as CSPs
+\label{sec-1-2-1}%
+
+\item <2-> Example Problem\\
+\label{sec-1-2-2}%
+\texttt{ABC DC EFG HGIIJK FBE}
+
+
+\begin{enumerate}
+\item What are the variables?
+\item What is the domain of those variables?
+\item What are the constraints?
+\end{enumerate}
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Cryptogram as a CSP}
+\label{sec-1-3}
+
+Cipher: \texttt{ABC DC EFG HGIIJK FBE}\\
+Plain text: \texttt{?}
+
+\begin{itemize}
+\item <1-> Treating each word as a variable, identify word pairs that have a constraint between them. Draw a constraint graph.
+\item <2->  We use a dictionary to find the domain of each variable. \\
+\texttt{Dom(ABC) = Dom(EFG) = Dom(FBE) = \{DOG, MAN, THE, HAT \}}\\
+  \texttt{Dom(DC) = \{IN, MY, TO\}}\\
+  \texttt{Dom(HGIIJK) = \{BATTER, SUDDEN, YELLOW\}}\\
+\item <3-> Solve the cryptogram by using backtracking search (without forward checking) assigning variables from left to right.
+\item <4->  How would the search change if forward checking was allowed?
+\end{itemize}
+\end{frame}
+\section{Local Search}
+\label{sec-2}
+\begin{frame}
+\frametitle{Traveling Salesman Problem}
+\label{sec-2-1}
+\begin{itemize}
+
+\item A problem in graph theory requiring the most efficient (i.e., least total distance) Hamiltonian cycle a salesman can take through each of  cities.
+\label{sec-2-1-1}%
+
+\item <2-> No general method of solution is known, and the problem is NP-hard.
+\label{sec-2-1-2}%
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Small Traveling Salesman Problem}
+\label{sec-2-2}
+
+A traveler needs to visit 4 cities. He knows the distance between each
+pair of cities. His aim to figure out the shortest route that visits
+all the cities.  \\
+Distances between cities. \\
+\texttt{A-B 6}\\
+\texttt{A-C 1}\\
+\texttt{A-D 5}\\
+\texttt{B-C 3}\\
+\texttt{B-D 2}\\
+\texttt{C-D 4}\\
+\end{frame}
+\begin{frame}
+\frametitle{Local Search for Traveling Salesman Problem}
+\label{sec-2-3}
+
+\begin{itemize}
+\item State space: a set of all possible tours, e.g. ABCD, ACBD etc
+\item Operators: change position of adjacent cities within the current tour
+\item Heuristic function - length of the tour
+\item Initial State - ABCD
+\item Distances between cities. \\
+\texttt{A-B 6}\\
+   \texttt{A-C 1}\\
+   \texttt{A-D 5}\\
+   \texttt{B-C 3}\\
+   \texttt{B-D 2}\\
+   \texttt{C-D 4}\\
+\item Perform steepest descent.
+\end{itemize}
+\end{frame}
+\section{Homework}
+\label{sec-3}
+\begin{frame}
+\frametitle{Pay attention to}
+\label{sec-3-1}
+
+\begin{itemize}
+\item algorithms specified in the homework questions.
+\item difference between a `state' of the world and a `node'
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,459 @@
+% Created 2012-05-25 Fri 12:21
+\documentclass[compress, 9pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\usetheme{default}
+\usecolortheme[RGB={0,38,93}]{structure}
+\usefonttheme{serif}
+\useinnertheme{circles}
+\useoutertheme[]{shadow}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{natbib}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{bibentry}
+\institute{Computer Science and Engineering \\ University of Michigan}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{Decision Trees and Ensemble Learning}
+\author{Shiwali Mohan}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Outline}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+
+
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+
+\section{Review}
+\label{sec-1}
+\begin{frame}
+\frametitle{Decision Trees Review}
+\label{sec-1-1}
+\begin{itemize}
+
+\item <1-> What is a decision tree?
+\label{sec-1-1-1}%
+\begin{itemize}
+
+\item <2-> a function that takes as input a vector of attribute values and returns a output value
+\label{sec-1-1-1-1}%
+
+\item <2-> assumption: inputs are discrete and output is boolean
+\label{sec-1-1-1-2}%
+
+\item <2-> given a set of examples: value assignment to attributes in input and corresponding output value
+\label{sec-1-1-1-3}%
+\end{itemize} % ends low level
+
+\item <3-> Entropy of a random variable?
+\label{sec-1-1-2}%
+\begin{itemize}
+
+\item <4-> measurement of uncertainity of a random variable
+\label{sec-1-1-2-1}%
+
+\item <4-> acquisition of information corresponds to reduction in entropy
+\label{sec-1-1-2-2}%
+
+\item <4-> \[H(V) = -\sum_k P(v_k)\log_2P(v_k)\]
+\label{sec-1-1-2-3}%
+
+\item <5-> $H(fair-coin)$?
+\label{sec-1-1-2-4}%
+
+\item <6-> $H(tail-only)$?
+\label{sec-1-1-2-5}%
+\end{itemize} % ends low level
+
+\item <7-> $B(q)$
+\label{sec-1-1-3}%
+\begin{itemize}
+
+\item <8-> entropy of a Boolean random variable that is true with a probability $q$
+\label{sec-1-1-3-1}%
+
+\item <8-> $B(q) = -(q \log_2 q + (1-q) \log_2 (1-q))$
+\label{sec-1-1-3-2}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\section{Decision Tree}
+\label{sec-2}
+\begin{frame}
+\frametitle{Learning to Lunch}
+\label{sec-2-1}
+
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+ Price   &  Food Type  &  Rush?  &  Results  &  Index  \\
+\hline
+ High    &  Sushi      &  Hurry  &  Good     &  x1     \\
+ Low     &  Pizza      &  Hurry  &  Good     &  x2     \\
+ Medium  &  Hamburger  &  Hurry  &  Good     &  x3     \\
+ Medium  &  Pizza      &  Relax  &  Good     &  x4     \\
+ High    &  Gruel      &  Relax  &  Bad      &  x5     \\
+ High    &  Hamburger  &  Relax  &  Good     &  x6     \\
+ Low     &  Gruel      &  Hurry  &  Bad      &  x7     \\
+ Low     &  Sushi      &  Relax  &  Bad      &  x8     \\
+ High    &  Pizza      &  Hurry  &  Bad      &  x9     \\
+ High    &  Hamburger  &  Hurry  &  Bad      &  x10    \\
+ Medium  &  Hamburger  &  Hurry  &  Bad      &  x11    \\
+ Low     &  Gruel      &  Relax  &  Bad      &  x12    \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+
+\item <2-> What is the entropy of the result attribute of the whole example set?
+\label{sec-2-1-1}%
+\begin{itemize}
+
+\item <3-> $B(\frac{5}{12})$
+\label{sec-2-1-1-1}%
+
+\item <4-> $-\frac{5}{12}\log_2\frac{5}{12} - \frac{7}{12}\log_2\frac{27}{12} = 0.9803$
+\label{sec-2-1-1-2}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Learning to Lunch}
+\label{sec-2-2}
+
+\small
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+ Price   &  Food Type  &  Rush?  &  Results  &  Index  \\
+\hline
+ High    &  Sushi      &  Hurry  &  Good     &  x1     \\
+ Low     &  Pizza      &  Hurry  &  Good     &  x2     \\
+ Medium  &  Hamburger  &  Hurry  &  Good     &  x3     \\
+ Medium  &  Pizza      &  Relax  &  Good     &  x4     \\
+ High    &  Gruel      &  Relax  &  Bad      &  x5     \\
+ High    &  Hamburger  &  Relax  &  Good     &  x6     \\
+ Low     &  Gruel      &  Hurry  &  Bad      &  x7     \\
+ Low     &  Sushi      &  Relax  &  Bad      &  x8     \\
+ High    &  Pizza      &  Hurry  &  Bad      &  x9     \\
+ High    &  Hamburger  &  Hurry  &  Bad      &  x10    \\
+ Medium  &  Hamburger  &  Hurry  &  Bad      &  x11    \\
+ Low     &  Gruel      &  Relax  &  Bad      &  x12    \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+
+\item What is first attribute to split on?
+\label{sec-2-2-1}%
+\begin{itemize}
+
+\item <2-> That attribute that gives us the most information gain, reduces the entropy by the largest amount.
+\label{sec-2-2-1-1}%
+
+\item <3-> \[Remainder(A)= \sum_{k=1}^{d}\frac{p_k+n_k}{p+n}B(\frac{p_k}{p_k+n_k})\]
+\label{sec-2-2-1-2}%
+
+\item <4-> \[Gain(A) = B(\frac{p_k}{p_k+n_k}) - Remainder(A)\]
+\label{sec-2-2-1-3}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Learning to Lunch}
+\label{sec-2-3}
+
+\small
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+ Price   &  Food Type  &  Rush?  &  Results  &  Index  \\
+\hline
+ High    &  Sushi      &  Hurry  &  Good     &  x1     \\
+ Low     &  Pizza      &  Hurry  &  Good     &  x2     \\
+ Medium  &  Hamburger  &  Hurry  &  Good     &  x3     \\
+ Medium  &  Pizza      &  Relax  &  Good     &  x4     \\
+ High    &  Gruel      &  Relax  &  Bad      &  x5     \\
+ High    &  Hamburger  &  Relax  &  Good     &  x6     \\
+ Low     &  Gruel      &  Hurry  &  Bad      &  x7     \\
+ Low     &  Sushi      &  Relax  &  Bad      &  x8     \\
+ High    &  Pizza      &  Hurry  &  Bad      &  x9     \\
+ High    &  Hamburger  &  Hurry  &  Bad      &  x10    \\
+ Medium  &  Hamburger  &  Hurry  &  Bad      &  x11    \\
+ Low     &  Gruel      &  Relax  &  Bad      &  x12    \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+
+\item What is first attribute to split on?
+\label{sec-2-3-1}%
+\begin{itemize}
+
+\item <2-> Remainder(Type)?
+\label{sec-2-3-1-1}%
+\begin{itemize}
+
+\item <3-> $\frac{2}{12}B(\frac{1}{2}) + \frac{3}{12}B(\frac{2}{3})+\frac{4}{12}B(\frac{1}{2})+\frac{3}{12}B(0) = 0.6371$
+\label{sec-2-3-1-1-1}%
+\end{itemize} % ends low level
+
+\item <4-> Remainder(Price)?
+\label{sec-2-3-1-2}%
+\begin{itemize}
+
+\item <5->  $\frac{5}{12}B(\frac{2}{5}) + \frac{3}{12}B(\frac{2}{3})+\frac{4}{12}B(\frac{1}{4}) = 0.90448$
+\label{sec-2-3-1-2-1}%
+\end{itemize} % ends low level
+
+\item <5-> Remainder(Rush)?
+\label{sec-2-3-1-3}%
+\begin{itemize}
+
+\item <6-> $\frac{6}{12}B(\frac{1}{2}) + \frac{6}{12}B(\frac{2}{3}) = 0.9591$
+\label{sec-2-3-1-3-1}%
+\end{itemize} % ends low level
+
+\item <7-> Gain(Type)? Gain(Price)? Gain(Rush)?
+\label{sec-2-3-1-4}%
+\begin{itemize}
+
+\item <8-> 0.3432, 0.07585, 0.0212
+\label{sec-2-3-1-4-1}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\section{Ensemble Learning}
+\label{sec-3}
+\begin{frame}
+\frametitle{Ensemble of Stumps}
+\label{sec-3-1}
+
+\small
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+ Price   &  Food Type  &  Rush?  &  Results  &  Index  \\
+\hline
+ High    &  Sushi      &  Hurry  &  Good     &  x1     \\
+ Low     &  Pizza      &  Hurry  &  Good     &  x2     \\
+ Medium  &  Hamburger  &  Hurry  &  Good     &  x3     \\
+ Medium  &  Pizza      &  Relax  &  Good     &  x4     \\
+ High    &  Gruel      &  Relax  &  Bad      &  x5     \\
+ High    &  Hamburger  &  Relax  &  Good     &  x6     \\
+ Low     &  Gruel      &  Hurry  &  Bad      &  x7     \\
+ Low     &  Sushi      &  Relax  &  Bad      &  x8     \\
+ High    &  Pizza      &  Hurry  &  Bad      &  x9     \\
+ High    &  Hamburger  &  Hurry  &  Bad      &  x10    \\
+ Medium  &  Hamburger  &  Hurry  &  Bad      &  x11    \\
+ Low     &  Gruel      &  Relax  &  Bad      &  x12    \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+
+\item <2-> What is the weight of examples?
+\label{sec-3-1-1}%
+\begin{itemize}
+
+\item <3-> $\frac{1}{12}$
+\label{sec-3-1-1-1}%
+\end{itemize} % ends low level
+
+\item <4-> What is the initial decision stump (use information gain)?
+\label{sec-3-1-2}%
+\begin{itemize}
+
+\item <5-> Food type
+\label{sec-3-1-2-1}%
+\end{itemize} % ends low level
+
+\item <6-> What is the classification error?
+\label{sec-3-1-3}%
+\begin{itemize}
+
+\item <7-> Sushi (good), Hamburger (good), Pizza (good), Gruel (bad)
+\label{sec-3-1-3-1}%
+
+\item <7-> $\frac{4}{12}=0.333$
+\label{sec-3-1-3-2}%
+\end{itemize} % ends low level
+
+\item <8-> What is the weight of the hypothesis?
+\label{sec-3-1-4}%
+\begin{itemize}
+
+\item <9-> $z[1 ]= \log(\frac{1-0.333}{0.333}) = 0.695$
+\label{sec-3-1-4-1}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Ensemble of Stumps}
+\label{sec-3-2}
+
+\small
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+ Price   &  Food Type  &  Rush?  &  Results  &  Index  \\
+\hline
+ High    &  Sushi      &  Hurry  &  Good     &  x1     \\
+ Low     &  Pizza      &  Hurry  &  Good     &  x2     \\
+ Medium  &  Hamburger  &  Hurry  &  Good     &  x3     \\
+ Medium  &  Pizza      &  Relax  &  Good     &  x4     \\
+ High    &  Gruel      &  Relax  &  Bad      &  x5     \\
+ High    &  Hamburger  &  Relax  &  Good     &  x6     \\
+ Low     &  Gruel      &  Hurry  &  Bad      &  x7     \\
+ Low     &  Sushi      &  Relax  &  Bad      &  x8     \\
+ High    &  Pizza      &  Hurry  &  Bad      &  x9     \\
+ High    &  Hamburger  &  Hurry  &  Bad      &  x10    \\
+ Medium  &  Hamburger  &  Hurry  &  Bad      &  x11    \\
+ Low     &  Gruel      &  Relax  &  Bad      &  x12    \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+
+\item How will the weight change?
+\label{sec-3-2-1}%
+\end{itemize} % ends low level
+\end{frame}
+\begin{frame}
+\frametitle{Ensemble of Stumps}
+\label{sec-3-3}
+
+\small
+
+\begin{center}
+\begin{tabular}{lllllr}
+\hline
+ Price   &  Food Type  &  Rush?  &  Results  &  Index  &  Weight  \\
+\hline
+ High    &  Sushi      &  Hurry  &  Good     &  x1     &  0.0625  \\
+ Low     &  Pizza      &  Hurry  &  Good     &  x2     &  0.0625  \\
+ Medium  &  Hamburger  &  Hurry  &  Good     &  x3     &  0.0625  \\
+ Medium  &  Pizza      &  Relax  &  Good     &  x4     &  0.0625  \\
+ High    &  Gruel      &  Relax  &  Bad      &  x5     &  0.0625  \\
+ High    &  Hamburger  &  Relax  &  Good     &  x6     &  0.0625  \\
+ Low     &  Gruel      &  Hurry  &  Bad      &  x7     &  0.0625  \\
+ Low     &  Sushi      &  Relax  &  Bad      &  x8     &   0.125  \\
+ High    &  Pizza      &  Hurry  &  Bad      &  x9     &   0.125  \\
+ High    &  Hamburger  &  Hurry  &  Bad      &  x10    &   0.125  \\
+ Medium  &  Hamburger  &  Hurry  &  Bad      &  x11    &   0.125  \\
+ Low     &  Gruel      &  Relax  &  Bad      &  x12    &  0.0625  \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+
+\item <1-> How will the weight change?
+\label{sec-3-3-1}%
+\begin{itemize}
+
+\item <2-> $w[j] \leftarrow w[j]. \frac{error}{(1-error)}$
+\label{sec-3-3-1-1}%
+
+\item <2-> NORMALIZE(w)
+\label{sec-3-3-1-2}%
+\end{itemize} % ends low level
+
+\item <3-> New entropy of the sample
+\label{sec-3-3-2}%
+\begin{itemize}
+
+\item <4-> $-0.3125\log_2(0.3125) - 0.6875\log_2(0.6875)$
+\label{sec-3-3-2-1}%
+\end{itemize} % ends low level
+
+\item <5-> Genrate the next stump.
+\label{sec-3-3-3}%
+\begin{itemize}
+
+\item <6-> \[Remainder(A)= \sum_{k=1}^{d}\frac{p_k+n_k}{p+n}B(\frac{p_k}{p_k+n_k})\]
+\label{sec-3-3-3-1}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+\section{PAC}
+\label{sec-4}
+\begin{frame}
+\frametitle{PAC Hypothesis}
+\label{sec-4-1}
+\begin{itemize}
+
+\item <2-> Size of the hypothesis space of this problem.
+\label{sec-4-1-1}%
+\begin{itemize}
+
+\item <3-> $2^{3*4*2}$
+\label{sec-4-1-1-1}%
+\end{itemize} % ends low level
+
+\item <4-> If a hypothesis classifies more than 3 samples wrong, it is a bad hypothesis. What is the epsilon?
+\label{sec-4-1-2}%
+\begin{itemize}
+
+\item <5-> $\frac{3}{24}$
+\label{sec-4-1-2-1}%
+\end{itemize} % ends low level
+
+\item <6-> After 12 examples are observed, what is the hypothesis space?
+\label{sec-4-1-3}%
+\begin{itemize}
+
+\item <7-> $2^{12}$
+\label{sec-4-1-3-1}%
+\end{itemize} % ends low level
+
+\item <8-> How many of these are approximately correct?
+\label{sec-4-1-4}%
+\begin{itemize}
+
+\item <9-> $1 + 12 + {12\choose2}$
+\label{sec-4-1-4-1}%
+\end{itemize} % ends low level
+
+\item <10-> What is the probability that a randomly-chosen hypothesis that is consistent with the 8 examples seen so far will be approximately correct?
+\label{sec-4-1-5}%
+\begin{itemize}
+
+\item <11-> $\frac{1 + 12 + {12\choose2}} {2^{12}}$\\
+\label{sec-4-1-5-1}%
+\end{itemize} % ends low level
+\end{itemize} % ends low level
+\end{frame}
+
+\end{document}

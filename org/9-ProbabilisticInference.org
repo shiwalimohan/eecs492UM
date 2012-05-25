@@ -1,0 +1,68 @@
+#+TITLE:   Probabilistic Inference
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 1
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+
+
+* Marginalization of Variables
+ #+CAPTION: Bayes Net (A, B, C, D, E)
+ #+ATTR_LaTeX: width=8cm
+[[file:../images/bnet.pdf]]
+** Compute a CPT that gives probability of D in terms of B.
+*** <2-> B = T, P(C) = 0.7*0.3 + 0.1*0.7; B = F, P(C) = 0.8*0.3 + 0.2*0.7
+** <3-> Compute a CPT that gives probability of E in term of A.
+*** <4-> A = T, P(E) = 0.8*0.7 + 0.2*0.2; A = F, P(E) = 0.4*0.7 + 0.6*0.2
+* Utility of an action
+Two banks are on the x axis. Left-bank is at lbx=0 and right-bank is
+at rbx=20. Agent's location on the number line is at 0<a<20. The agent
+has 5$. If it goes to left-bank, it can get 20$. If it goes to the
+right-bank, it can get 10$. However, in order to get to the bank the
+agent has to spend money at the rate of 2*(distance from the
+bank). The agent has three actions - go-left, go-right and stay. The
+agent wants to maximize the money it has. Left-bank might be closed with a probability
+of 0.25, right-bank might be closed with a probability of 0.20. 
+
+** <1-> What is the expected utility of each action for a position x?
+*** <2-> EU(stay) = 5
+     EU(go-left) = 5 + (0.75*20 + 0.25*0) - 2*x\\
+     EU(go-right) = 5 + (0.80*10 + 0.20*0) - 2(20-x)
+** <3-> What are the threshold (in terms of distances) for optimal action?
+*** <4-> threshold 7.5-16
+* JavaBayes Demo

@@ -1,0 +1,199 @@
+% Created 2012-05-25 Fri 12:20
+\documentclass[compress, 9pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\tolerance=1000
+\usetheme{default}
+\usecolortheme[RGB={0,38,93}]{structure}
+\usefonttheme{serif}
+\useinnertheme{circles}
+\useoutertheme[]{shadow}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{natbib}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{bibentry}
+\institute{Computer Science and Engineering \\ University of Michigan}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{Propositional Logic}
+\author{Shiwali Mohan}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.8.09}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Outline}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\end{frame}
+
+
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+
+
+\section{Translation}
+\label{sec-1}
+\begin{frame}
+\frametitle{Translate to Propositional Logic}
+\label{sec-1-1}
+
+\texttt{p}: You get an A on the final exam \\
+\texttt{q}: You do every exercise in the book \\
+\texttt{r}: You get an A in this class \\
+\begin{itemize}
+\item <2-> You get an A in this class, but you do not do every exercise in the
+  book
+\item <3-> $r \wedge -q$
+\item <4-> If you got an A in this class, you must have gotten an A on the
+   final.
+\item <5-> $r \Rightarrow p$
+\item <6-> Getting an A on the final and doing every exercise in the book is
+   sufficient for getting an A in this class
+\item <7-> $p \wedge q \Rightarrow r$
+\item <8-> You cannot get an A in this class if you do not do every exercise
+  in the book, unless you get an A on the final.
+\item <9-> $-q \Rightarrow (-p \Rightarrow -r)$ or $-q \wedge -p \Rightarrow -r$
+\item <10-> why?
+\end{itemize}
+\end{frame}
+\section{Valid, Satisfiable, Unsatisfiable}
+\label{sec-2}
+\begin{frame}
+\frametitle{Determine if valid/satisfiable/unsatisfiable}
+\label{sec-2-1}
+
+\begin{itemize}
+\item <1-> RockStar $\vee$ -RockStar
+\item <2-> valid, satisfiable
+\item <3-> BigHouse $\wedge$ -BigHouse
+\item <4-> unsatisfiable
+\item <5-> Raining $\wedge$ Rainbow
+\item <6-> satisfiable
+\item <7-> $(-P \vee -Q) \Rightarrow ((-P \wedge Q) \vee (P \wedge -Q) \vee
+  (-P \wedge -Q))$
+\item <8-> valid, satisfiable
+\item <9-> $((-P \vee P) \Rightarrow Q) \wedge (Q \Rightarrow (P \wedge
+  -P))$
+\item <10-> unsatisfiable
+\end{itemize}
+\end{frame}
+\section{Resolution}
+\label{sec-3}
+\begin{frame}
+\frametitle{Resolution by Contradiction}
+\label{sec-3-1}
+
+Sentence:  
+\begin{itemize}
+\item Heads I win; tails, you lose
+\item <2-> Coin must be head or tail but not both.
+\item <2-> Winning and losing are complements for both you and me.
+\item <2-> Exactly one of us will win.
+\end{itemize}
+
+Prove: 
+\begin{itemize}
+\item I win
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Axioms}
+\label{sec-3-2}
+
+\begin{itemize}
+\item Coin must be head or tail but not both.
+\begin{itemize}
+\item <2-> $H \Leftrightarrow -T$
+\end{itemize}
+\item Winning and losing are complements for both you and me.
+\begin{itemize}
+\item <2-> $IW \Leftrightarrow -IL$
+\item <2-> $YW \Leftrightarrow -YL$
+\end{itemize}
+\item Exactly one of us will win.
+\begin{itemize}
+\item <2-> $IW \Leftrightarrow -YW$
+\end{itemize}
+\item Heads I win
+\begin{itemize}
+\item <2-> $H \Rightarrow IW$
+\end{itemize}
+\item Tails you lose
+\begin{itemize}
+\item <2-> $T \Rightarrow YL$
+\end{itemize}
+\item <3-> Next Step?
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{KB in Conjunctive Normal Form}
+\label{sec-3-3}
+
+
+Knowledge Base\\
+
+\begin{center}
+\begin{tabular}{ll}
+ 1. $H \Leftrightarrow -T$    &  1a. $-H \vee -T$    \\
+                              &  1b. $T \vee H$      \\
+ 2. $IW \Leftrightarrow -IL$  &  2a. $-IW \vee -IL$  \\
+                              &  2b. $IL \vee IW$    \\
+ 3. $YW \Leftrightarrow -YL$  &  3a. $-YW \vee -YL$  \\
+                              &  3b. $YL \vee YW$    \\
+ 4. $IW \Leftrightarrow -YW$  &  4a. $-IW \vee -YW$  \\
+                              &  4b. $YW \vee IW$    \\
+ 5. $H \Rightarrow IW$        &  5. $-H \vee IW$     \\
+ 6. $T \Rightarrow LY$        &  6. $-T \vee YL$     \\
+\end{tabular}
+\end{center}
+
+
+
+To prove($\alpha$): $IW$ \\
+Add -$\alpha$ to KB
+\end{frame}
+\begin{frame}
+\frametitle{Resolution}
+\label{sec-3-4}
+
+
+\begin{center}
+\begin{tabular}{ll}
+ 1a. $-H \vee -T$    &  7. $T \vee IW$ [1b,5]        \\
+ 1b. $T \vee H$      &  8. $H \vee YL$ [1b, 6]       \\
+ 2a. $-IW \vee -IL$  &  9. $H \vee -YW$ [3a, 8]      \\
+ 2b. $IL \vee IW$    &  10. $H \vee IW$ [4b, 9]      \\
+ 3a. $-YW \vee -YL$  &  11. $-T \vee IW$ [1a, 10]    \\
+ 3b. $YL \vee YW$    &  12. $IW$ [7,11;11,13;10,18]  \\
+ 4a. $-IW \vee -YW$  &  13. $T$ [0, 7; 1b,15]        \\
+ 4b. $YW \vee IW$    &  14. $YW$ [0,4b]              \\
+ 5. $-H \vee IW$     &  15. $-H$ [0,5]               \\
+ 6. $-T \vee YL$     &  16. $-IW$ [4a,14]            \\
+                     &  17. $YL$ [15,8]              \\
+                     &  18. $-YW$ [15,9]             \\
+                     &  17. $empty$ [12, 0; 12,16]   \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,219 @@
+#+TITLE:   Probability and Inference
+#+AUTHOR:   Shiwali Mohan
+#+EMAIL:     shiwali@umich.edu
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:t ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+startup: oddeven
+
+#+startup: beamer
+#+startup: pgfpages
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [compress, 9pt]
+#+latex_header: \usetheme{default}
+#+latex_header: \usecolortheme[RGB={0,38,93}]{structure}
+#+latex_header: \usefonttheme{serif}
+#+latex_header: \useinnertheme{circles}
+#+latex_header: \useoutertheme[]{shadow}
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+latex_header: \usepackage{natbib}
+#+latex_header: \usepackage{fleqn}
+#+latex_header: \usepackage{epsf}
+#+latex_header: \usepackage[dvips]{color}
+#+begin_latex
+\title[Search \hspace{1em}\insertframenumber/
+\inserttotalframenumber]{Full Title}
+#+end_latex
+#+latex_header: \usepackage{bibentry}
+#+BEAMER_FRAME_LEVEL: 2
+#+latex_header: \institute{Computer Science and Engineering \\ University of Michigan}
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+#+BEAMER_HEADER_EXTRA \beamerdefaultoverlayspecification{<+->}
+
+* Probability review
+** Terminology
+*** <1-> Prior probability
+**** <2-> belief in propositions in the absence of any other information
+**** <2-> marginal, unconditional
+***** <3->  P(double): ?
+
+*** <4-> Posterior Probability
+**** <5-> belief in propositions after evidence
+**** <5-> conditional
+***** <6-> P(double/5):?
+- Posterior probability
+  belief in propositions after evidence
+  P(double/5):?
+  P(11/6):?
+* Probability and Inference from Full Joint Distribution
+** Calculating Probabilities
+Dr. Lycan Thropes, an expert in werewolves, asserts that a person is a werewolf 
+iff they have hairy palms and howl at the moon. Further, he states that 25% of the 
+population either has hairy palms or howls or both, and that 20% of the
+population has hairy palms.
+*** <1-> Random variables?
+**** <2-> hairy palms (palms), howl (howls), werewolf (werewolf)
+*** <3-> What is the bound on probability that a randomly selected person from the population howls at the moon?
+**** <4-> 0.05 <= P(howls) <= 0.25
+*** <5-> If one in hundred people is a werewolf, what is the P(howls)?
+**** <6-> 0.06
+
+** Inference on Full Joint
+Noted werewolf specialist Prof. Loupgarou disagrees with Thropes, and 
+provides a joint probability table for combinations of werewolves, 
+hairy palms, and howling. 
+
+*** <2-> What is a full joint distribution?
+*** <3-> How many entries exist in the full joint distribution?
+*** <4-> Given the following full joint distribution. Sum to 1?
+| hairy palms | howls | werewolf | Probability |
+|-------------+-------+----------+-------------|
+| false       | false | false    |         0.7 |
+| false       | false | true     |       0.005 |
+| false       | true  | false    |        0.05 |
+| false       | true  | true     |        0.01 |
+| True        | false | false    |         0.2 |
+| True        | false | true     |        0.01 |
+| True        | true  | false    |       0.005 |
+| True        | true  | true     |        0.02 |
+*** <5-> What is the marginal probability of werewolf?
+**** <6-> 0.045
+*** <7-> If an individual has hairy palms and howls, what is the probability that the individual is a werewolf?
+**** <8-> 0.8
+*** <8-> What is the probability that a werewolf has both hairy palms and howls?
+**** <9-> 0.44
+
+* Bayes Net
+** Inference
+Events A, B, C, D, E occur with the following probabilities. Assume
+conditional independence amongst variables.
+
+: P(A) = 0.3
+: P(B) = 0.6
+: P(C|A) = 0.8
+: P(C|-A) = 0.4
+: P(D|A,B) = 0.7
+: P(D|A,-B) = 0.8
+: P(D|-A,B) = 0.1
+: P(D|-A,-B) = 0.2
+: P(E|C) = 0.7
+: P(E|C) = 0.2
+* Bayes Net
+For given probabilities
+
+P(A) = 0.3
+P(B) = 0.6
+P(C|A) = 0.8
+P(C|-A) = 0.4
+P(D|A,B) = 0.7 
+P(D|A,-B) = 0.8 
+P(D|-A,B) = 0.1 
+P(D|-A,B) = 0.2 
+P(E|C) = 0.7 
+P(E|C) = 0.2
+
+- Construct a Bayes Net
+
+
+- P(D)?
+
+P(D,A,B) + P(D,A,-B) + P(D,-A,B) + P(D,-A,-B) =
+P(D|A,B) P(A,B) + P(D|A,-B) P(A,-B) + 
+P(D|-A,B) P(-A,B) + P(D|-A,-B) P(-A,-B) = 
+(since A and B are independent absolutely)
+P(D|A,B) P(A) P(B) + P(D|A,-B) P(A) P(-B) + 
+P(D|-A,B) P(-A) P(B) + P(D|-A,B) P(-A) P(-B) =
+0.7*0.3*0.6 + 0.8*0.3*0.4 + 0.1*0.7*0.6 + 0.2*0.7*0.4 = 0.32
+
+
+- P(A|C)?
+
+
+P(A|C) = P(C|A)P(A) / P(C). 
+Now P(C) = P(C,A) + P(C,-A) = 
+P(C|A)P(A) + P(C|-A)P(-A) = 
+0.8*0.3+ 0.4*0.7 = 0.52
+So P(C|A)P(A) / P(C) = 0.8*0.3/0.52= 0.46.
+
+
+
+- P(C|-A,E)?
+
+P(C|-A,E) = 
+P(E|C,-A) * P(C|-A) / P(E|-A) = 
+P(E|C) * P(C|-A) / P(E|-A). 
+Now P(E|-A) = P(E,C|-A) + P(E,-C|-A) =
+P(E|C,-A) P(C|-A) + P(E|-C,-A) P(-C|-A) = (since E is independent of A given C)
+P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A).
+So we have 
+P(C|-A, E) = 
+P(E|C) * P(C|-A) / (P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A)) =
+0.7*0.4 / (0.7 * 0.4 + 0.2 * 0.6) = 0.7
+: P(D|-A,-B) = 0.2
+: P(E|C) = 0.7
+: P(E|-C) = 0.2
+
+*** <1-> Construct a Bayes Net suggested by these probabilities.
+*** <2-> P(D)?
+*** <3-> 
+: P(D,A,B) + P(D,A,-B) + P(D,-A,B) + P(D,-A,-B)
+: = P(D|A,B) P(A,B) + P(D|A,-B) P(A,-B) 
+:   + P(D|-A,B) P(-A,B) + P(D|-A,-B) P(-A,-B) 
+: (since A and B are independent absolutely)
+: = P(D|A,B) P(A) P(B) + P(D|A,-B) P(A) P(-B) 
+:   + P(D|-A,B) P(-A) P(B) + P(D|-A,B) P(-A) P(-B) 
+: = 0.7*0.3*0.6 + 0.8*0.3*0.4 + 0.1*0.7*0.6 + 0.2*0.7*0.4 = 0.32
+** Inference
+For given probabilities
+: P(A) = 0.3
+: P(B) = 0.6
+: P(C|A) = 0.8
+: P(C|-A) = 0.4
+: P(D|A,B) = 0.7
+: P(D|A,-B) = 0.8
+: P(D|-A,B) = 0.1
+: P(D|-A,-B) = 0.2
+: P(E|C) = 0.7
+: P(E|-C) = 0.2
+*** P(A|C)?
+*** <2-> 
+: P(A|C) = P(C|A)P(A) / P(C)
+: P(C) = P(C,A) + P(C,-A) 
+:      = P(C|A)P(A) + P(C|-A)P(-A) 
+:      = 0.8*0.3+ 0.4*0.7 = 0.52
+: P(C|A)P(A) / P(C) = 0.8*0.3/0.52= 0.46.
+
+** Inference
+For given probabilities
+: P(A) = 0.3
+: P(B) = 0.6
+: P(C|A) = 0.8
+: P(C|-A) = 0.4
+: P(D|A,B) = 0.7
+: P(D|A,-B) = 0.8
+: P(D|-A,B) = 0.1
+: P(D|-A,-B) = 0.2
+: P(E|C) = 0.7
+: P(E|-C) = 0.2
+
+*** P(C|-A,E)?
+*** <2-> 
+: P(C|-A,E) 
+: = P(E|C,-A) * P(C|-A) / P(E|-A) 
+: = P(E|C) * P(C|-A) / P(E|-A).
+: P(E|-A) = P(E,C|-A) + P(E,-C|-A) 
+:         = P(E|C,-A) P(C|-A) + P(E|-C,-A) P(-C|-A) 
+:           (since E is independent of A given C)
+:          = P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A)
+: P(C|-A, E) 
+: = P(E|C) * P(C|-A) / (P(E|C) * P(C|-A) + P(E|-C) * P(-C|-A)) 
+: 0.7*0.4 / (0.7 * 0.4 + 0.2 * 0.6) = 0.7

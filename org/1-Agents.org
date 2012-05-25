@@ -1,0 +1,26 @@
+Two banks are on the x axis. Left-bank is at lbx=0 and right-bank is
+at rbx=20. Agent's location on the number line is at 0<=a<=20. The agent
+has 5$. If it goes to left-bank, it can get 20$. If it goes to the
+right-bank, it can get 10$. However, in order to get to the bank the
+agent has to spend money at the rate of 2*(distance from the
+bank). The agent has three actions - go-left, go-right and stay. The
+agent wants to maximize the money it has. Assume that the location of
+the agent is an integer.
+
+* Table based agent: for every location, compute the total money with
+ the agent on going-left, going-right, stay. Choose action
+ accordingly. 20 entries in the table.
+
+* Threshold agent: if the location of the agent is less than 10,
+ go-left, if greater than 15, go-right. between 10-15, stay.
+
+* Change cost of moving: if the cost of moving changes from
+ 2*(distance from the bank) to 2.5*(distance from the bank). How does
+ the threshold change? stay if between 8-16.
+
+* Left-bank might be closed with a probability of 0.25, right-bank
+ might be closed with a probability of 0.20. The cost of going to
+ each bank is 2*(distance from the bank). The expected value of
+ going to each bank changes (left-bank: 15, right-bank: 8), changing
+ the 'stay' threshold to 7.5-16.
+
