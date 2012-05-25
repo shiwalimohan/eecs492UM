@@ -1,4 +1,5 @@
 
 * EECS 492 - Introduction to Artificial Intelligence
 University of Michigan
-GSI discussion session slides 
+
+(GSI discussion session slides)
