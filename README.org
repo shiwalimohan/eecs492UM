@@ -1,1 +1,4 @@
-GSI discussion session slides (Winter 2012)
+
+University of Michigan
+EECS 492 - Introduction to Artificial Intelligence
+GSI discussion session slides 
